@@ -56,7 +56,8 @@ function replacePhrases(value) {
 function replaceDirectTextNodes(element) {
   for (const node of element.childNodes) {
     if (node.nodeType !== Node.TEXT_NODE) continue;
-    node.textContent = replacePhrases(node.textContent);
+    const next = replacePhrases(node.textContent);
+    if (next !== node.textContent) node.textContent = next;
   }
 }
 
@@ -64,14 +65,16 @@ function polishElement(element) {
   if (!(element instanceof HTMLElement)) return;
 
   if (exactText.has(element.textContent.trim()) && element.children.length === 0) {
-    element.textContent = exactText.get(element.textContent.trim());
+    const next = exactText.get(element.textContent.trim());
+    if (next !== element.textContent) element.textContent = next;
   }
 
   if (element.matches('.sim-chip')) {
     const key = Object.keys(artifactLabels).find((name) => element.textContent.includes(name));
     if (key) {
       const ready = element.textContent.includes('已读取');
-      element.textContent = `${artifactLabels[key]} · ${ready ? '已带入' : '尚未完成'}`;
+      const next = `${artifactLabels[key]} · ${ready ? '已带入' : '尚未完成'}`;
+      if (next !== element.textContent) element.textContent = next;
     }
   }
 
@@ -86,7 +89,10 @@ function polishElement(element) {
 
   if (element.matches('button, b, small, span') && element.children.length === 0) {
     const trimmed = element.textContent.trim();
-    if (exactText.has(trimmed)) element.textContent = exactText.get(trimmed);
+    if (exactText.has(trimmed)) {
+      const next = exactText.get(trimmed);
+      if (next !== element.textContent) element.textContent = next;
+    }
   }
 }
 

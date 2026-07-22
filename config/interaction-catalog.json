@@ -1,0 +1,307 @@
+{
+  "version": "1.0",
+  "principle": "Shared teaching grammar, concept-specific simulators, live artifacts across lessons.",
+  "shared_primitives": [
+    {
+      "id": "prediction-gate",
+      "purpose": "先下注再实验，答错也解锁",
+      "best_for": [
+        "反直觉概念",
+        "边界判断"
+      ]
+    },
+    {
+      "id": "retryable-quiz",
+      "purpose": "答错可立即重试，不制造死锁",
+      "best_for": [
+        "课末检查",
+        "迁移判断"
+      ]
+    },
+    {
+      "id": "concept-linker",
+      "purpose": "术语、代码、图中部件互相高亮",
+      "best_for": [
+        "公式/API/架构映射"
+      ]
+    },
+    {
+      "id": "range-lab",
+      "purpose": "连续调参并实时观察结果",
+      "best_for": [
+        "temperature",
+        "token预算",
+        "阈值",
+        "窗口"
+      ]
+    },
+    {
+      "id": "toggle-compare",
+      "purpose": "只改变一个变量做 A/B 对比",
+      "best_for": [
+        "有/无上下文",
+        "有/无Schema",
+        "有/无校验"
+      ]
+    },
+    {
+      "id": "preset-explorer",
+      "purpose": "快速切换典型与极端案例",
+      "best_for": [
+        "边界案例",
+        "错误注入"
+      ]
+    },
+    {
+      "id": "budget-picker",
+      "purpose": "有限预算中选择高价值内容",
+      "best_for": [
+        "Few-shot",
+        "上下文选择",
+        "工具选择"
+      ]
+    },
+    {
+      "id": "branch-tree",
+      "purpose": "逐步选择路径并累计概率/成本/状态",
+      "best_for": [
+        "Agent路由",
+        "决策表",
+        "流程分支"
+      ]
+    },
+    {
+      "id": "step-simulator",
+      "purpose": "单步、自动、暂停、重置、发散",
+      "best_for": [
+        "重试循环",
+        "Agent loop",
+        "训练/恢复过程"
+      ]
+    },
+    {
+      "id": "spatial-map",
+      "purpose": "在二维空间选择和比较对象",
+      "best_for": [
+        "Embedding",
+        "示例相似度",
+        "检索结果"
+      ]
+    },
+    {
+      "id": "window-eviction",
+      "purpose": "内容随预算增长进入或被挤出窗口",
+      "best_for": [
+        "消息历史",
+        "Token窗口",
+        "上下文裁剪"
+      ]
+    },
+    {
+      "id": "pipeline-gates",
+      "purpose": "数据依次通过语法、Schema、业务检查",
+      "best_for": [
+        "结构化输出",
+        "验证链"
+      ]
+    },
+    {
+      "id": "live-code-runner",
+      "purpose": "真正运行TS并返回终端和测试结果",
+      "best_for": [
+        "TypeScript",
+        "LangChain",
+        "MCP"
+      ]
+    },
+    {
+      "id": "error-injection",
+      "purpose": "主动制造错误，让学员定位与修复",
+      "best_for": [
+        "调试",
+        "Prompt回归",
+        "RAG故障"
+      ]
+    },
+    {
+      "id": "experiment-matrix",
+      "purpose": "批量跑数据集并比较版本",
+      "best_for": [
+        "Prompt评估",
+        "检索评估"
+      ]
+    },
+    {
+      "id": "live-bridge",
+      "purpose": "上一课产物作为下一课真实输入",
+      "best_for": [
+        "连续项目",
+        "专栏串联"
+      ]
+    },
+    {
+      "id": "artifact-ledger",
+      "purpose": "记录学员逐课产出的Prompt、Schema、代码和数据集",
+      "best_for": [
+        "课程项目",
+        "总控台"
+      ]
+    },
+    {
+      "id": "help-drawer",
+      "purpose": "随时查看术语和前置知识，不打断主线",
+      "best_for": [
+        "零基础解释",
+        "API速查"
+      ]
+    }
+  ],
+  "lesson_optimization": [
+    {
+      "lesson": 1,
+      "title": "为什么 CRUD 不等于 AI 应用",
+      "keep": "装配式工作台",
+      "upgrade": "加入20次重复运行的结果分布和一次错误自动流转",
+      "patterns": [
+        "toggle-compare",
+        "step-simulator",
+        "live-bridge"
+      ]
+    },
+    {
+      "lesson": 2,
+      "title": "为什么选择 TypeScript",
+      "keep": "项目条件评分",
+      "upgrade": "把固定场景切换改为条件混合器；让用户自由开关团队和产品条件",
+      "patterns": [
+        "range-lab",
+        "toggle-compare",
+        "decision-score"
+      ]
+    },
+    {
+      "lesson": 3,
+      "title": "Java开发者的最小TS",
+      "keep": "Java对照与错误修复",
+      "upgrade": "取消再次装配部件，改成真实编辑器诊断：红线→修复→运行→测试",
+      "patterns": [
+        "live-code-runner",
+        "error-injection",
+        "preset-explorer"
+      ]
+    },
+    {
+      "lesson": 4,
+      "title": "一次模型请求里有什么",
+      "keep": "消息角色和Token解释",
+      "upgrade": "改成消息传送带与有限窗口，拖入System/User/History/Context并观察溢出",
+      "patterns": [
+        "window-eviction",
+        "budget-picker",
+        "live-bridge"
+      ]
+    },
+    {
+      "lesson": 5,
+      "title": "Prompt里放什么",
+      "keep": "Prompt槽位",
+      "upgrade": "增加删掉任一块的反事实实验，输出与失败原因同步变化",
+      "patterns": [
+        "toggle-compare",
+        "concept-linker",
+        "live-bridge"
+      ]
+    },
+    {
+      "lesson": 6,
+      "title": "可执行指令",
+      "keep": "规则漏洞",
+      "upgrade": "改成决策表+邮件传送带，规则顺序改变会导致真实误路由",
+      "patterns": [
+        "branch-tree",
+        "error-injection",
+        "step-simulator"
+      ]
+    },
+    {
+      "lesson": 7,
+      "title": "结构化输出与Zod",
+      "keep": "三道检查门",
+      "upgrade": "加入可编辑JSON和真实safeParse；学员修字段而不是只点答案",
+      "patterns": [
+        "pipeline-gates",
+        "live-code-runner",
+        "error-injection"
+      ]
+    },
+    {
+      "lesson": 8,
+      "title": "Few-shot",
+      "keep": "三例预算选择",
+      "upgrade": "加入示例语义地图、相似度与多样性；让重复示例在空间中显得挤在一起",
+      "patterns": [
+        "spatial-map",
+        "budget-picker",
+        "concept-linker"
+      ]
+    },
+    {
+      "lesson": 9,
+      "title": "Prompt评估",
+      "keep": "v1/v2比较",
+      "upgrade": "逐条播放评估集、筛选回归、修改Prompt一行后重跑",
+      "patterns": [
+        "experiment-matrix",
+        "error-injection",
+        "live-bridge"
+      ]
+    }
+  ],
+  "artifact_flow": [
+    {
+      "from": 1,
+      "to": 3,
+      "artifact": "EmailIntent业务对象与失败要求"
+    },
+    {
+      "from": 2,
+      "to": 3,
+      "artifact": "TypeScript技术路线选择"
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "artifact": "可运行的TS调用骨架"
+    },
+    {
+      "from": 4,
+      "to": 5,
+      "artifact": "完整Messages请求包"
+    },
+    {
+      "from": 5,
+      "to": 6,
+      "artifact": "Prompt v1"
+    },
+    {
+      "from": 6,
+      "to": 7,
+      "artifact": "分类规则与优先级"
+    },
+    {
+      "from": 7,
+      "to": 8,
+      "artifact": "Zod Schema与合法输出样例"
+    },
+    {
+      "from": 8,
+      "to": 9,
+      "artifact": "Few-shot示例集合"
+    },
+    {
+      "from": 9,
+      "to": "column_project",
+      "artifact": "Prompt v2、评估集和回归报告"
+    }
+  ]
+}

@@ -21,8 +21,28 @@ function ensureStyles() {
     .cr-stage{padding:58px 0;border-top:1px solid var(--cr-line)}.cr-stage-head{display:flex;gap:14px;align-items:baseline}.cr-stage-no{font:900 15px var(--cr-serif);color:var(--cr-teal)}.cr-stage h2{margin:0;font:900 clamp(1.5rem,3vw,2.25rem)/1.25 var(--cr-serif)}.cr-stage-lede{max-width:760px;color:var(--cr-muted)}.cr-stage-body{margin-top:22px}.cr-locked{position:relative;opacity:.45;pointer-events:none}.cr-locked::after{content:'完成前一部分后继续';position:absolute;inset:0;display:grid;place-items:center;background:rgba(244,245,240,.74);font-weight:800}
     .cr-options,.cr-quiz-options{display:grid;gap:10px}.cr-option,.cr-quiz-option{display:flex;gap:12px;text-align:left;padding:14px;border:1px solid var(--cr-line);border-radius:10px;background:var(--cr-card);cursor:pointer}.cr-option:hover,.cr-quiz-option:hover{border-color:var(--cr-teal)}.cr-option.selected{border-color:var(--cr-teal);box-shadow:0 0 0 2px var(--cr-teal-soft)}.cr-option-key{display:grid;place-items:center;width:28px;height:28px;flex:0 0 auto;border:1px solid var(--cr-ink);border-radius:7px;font:700 12px var(--cr-mono)}.cr-option small{display:block;color:var(--cr-muted)}.cr-feedback{margin-top:12px;padding:11px 13px;border-radius:9px;background:#eef1f1;color:var(--cr-muted)}.cr-feedback.good{background:var(--cr-teal-soft);color:#075b58}.cr-feedback.bad,.cr-feedback.miss{background:var(--cr-red-soft);color:#8f2635}.cr-quiz-option.correct{border-color:var(--cr-teal);background:var(--cr-teal-soft)}.cr-quiz-option.wrong{border-color:var(--cr-red);background:var(--cr-red-soft)}
     .cr-reveal{padding:18px;border-left:5px solid var(--cr-marker);background:#fffdf2}.cr-complete{margin-top:22px;padding:15px;border:1px solid var(--cr-teal);border-radius:10px;background:var(--cr-teal-soft);font-weight:800;color:#075b58}
+    .cr-official-reference{margin-top:54px;padding:22px;border-top:2px solid var(--cr-ink);background:rgba(255,255,255,.62)}.cr-official-reference>div:first-child{display:flex;justify-content:space-between;gap:16px;align-items:start}.cr-official-reference span{display:block;color:var(--cr-teal);font:700 10px var(--cr-mono);letter-spacing:.14em}.cr-official-reference h3{margin:5px 0 0;font:900 21px var(--cr-serif)}.cr-official-reference code{padding:4px 8px;border-radius:6px;background:#eef1f1;color:var(--cr-teal);font:700 11px var(--cr-mono)}.cr-official-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}.cr-official-links a{padding:10px 12px;border:1px solid var(--cr-line);border-radius:8px;background:#fff;color:var(--cr-ink);text-decoration:none}.cr-official-links a:hover{border-color:var(--cr-teal);color:var(--cr-teal)}.cr-official-note{margin:14px 0 0;color:var(--cr-muted);font-size:12px}
+    @media(max-width:700px){.cr-official-reference>div:first-child{flex-direction:column}.cr-official-links{grid-template-columns:1fr}}
   `;
   document.head.appendChild(style);
+}
+
+function renderOfficialReference(lesson) {
+  const official = lesson.officialReference;
+  if (!official) return '';
+  const links = (official.links ?? []).map((link) => `
+    <a href="${link.url}" target="_blank" rel="noreferrer noopener">${link.label} ↗</a>
+  `).join('');
+  return `
+    <footer class="cr-official-reference">
+      <div>
+        <div><span>OFFICIAL DOCUMENTATION</span><h3>本课官方依据</h3></div>
+        <code>${official.appliesTo}</code>
+      </div>
+      <div class="cr-official-links">${links}</div>
+      <p class="cr-official-note">${official.note ?? '课程内容以以上官方文档和标注版本为准。依赖升级后，应先核对 Changelog 与 Migration Guide。'}</p>
+    </footer>
+  `;
 }
 
 export class CourseRuntime {
@@ -66,6 +86,7 @@ export class CourseRuntime {
         </section>
       `).join('')}
       <div class="cr-complete" hidden data-role="lesson-complete">✓ 本课已经完成，你的项目成果已保存。</div>
+      ${renderOfficialReference(lesson)}
     `;
   }
 

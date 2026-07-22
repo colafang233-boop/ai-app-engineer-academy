@@ -14,6 +14,9 @@ on:
       - 'tools/test_column03_official.mjs'
       - 'tools/test_column03_official_browser.mjs'
       - 'tools/run_column03_official_browser.mjs'
+      - 'tools/build-cloudflare.mjs'
+      - 'package.json'
+      - 'wrangler.jsonc'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
@@ -36,6 +39,15 @@ jobs:
         run: |
           find packages/course-runtime/src courses/ai-app-engineering apps/runtime-academy \
             -name '*.js' -print0 | xargs -0 -n1 node --check
+          node --check tools/build-cloudflare.mjs
+
+      - name: Build Cloudflare static artifact
+        run: |
+          npm run build
+          test -f dist/index.html
+          test -f dist/apps/runtime-academy/index.html
+          test -f dist/packages/course-runtime/src/academy-app.js
+          test -f dist/courses/ai-app-engineering/column-03-official.js
 
       - name: Run runtime foundation tests
         run: node tools/test_course_runtime.mjs

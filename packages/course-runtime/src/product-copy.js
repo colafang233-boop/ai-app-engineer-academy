@@ -53,6 +53,13 @@ function replacePhrases(value) {
   return result;
 }
 
+function replaceDirectTextNodes(element) {
+  for (const node of element.childNodes) {
+    if (node.nodeType !== Node.TEXT_NODE) continue;
+    node.textContent = replacePhrases(node.textContent);
+  }
+}
+
 function polishElement(element) {
   if (!(element instanceof HTMLElement)) return;
 
@@ -68,7 +75,11 @@ function polishElement(element) {
     }
   }
 
-  if (element.matches('.sim-result, .v1-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete, .exam-result')) {
+  if (element.matches('.exam-result')) {
+    replaceDirectTextNodes(element);
+  }
+
+  if (element.matches('.sim-result, .v1-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete')) {
     const next = replacePhrases(element.textContent);
     if (next !== element.textContent) element.textContent = next;
   }

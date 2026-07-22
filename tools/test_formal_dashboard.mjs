@@ -11,7 +11,7 @@ const ragCommon = fs.readFileSync('courses/ai-app-engineering/column-04-rag-comm
 
 assert.match(dashboard, /七个专栏，一条完整学习路径/);
 assert.match(dashboard, /COLUMN \$\{String\(index \+ 1\)\.padStart\(2, '0'\)\}/);
-assert.match(dashboard, /RAG 检索与知识库工程/);
+assert.match(ragColumn, /RAG 检索与知识库工程/);
 assert.match(dashboard, /LangGraph 与 Agentic RAG/);
 assert.match(dashboard, /MCP 工具与协议/);
 assert.match(dashboard, /企业 AI 应用实战/);

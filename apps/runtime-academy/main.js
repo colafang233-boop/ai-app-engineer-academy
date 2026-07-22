@@ -3,6 +3,7 @@ import { EventBus } from '../../packages/course-runtime/src/event-bus.js';
 import { ProgressStore } from '../../packages/course-runtime/src/progress-store.js';
 import { AcademyRuntimeApp } from '../../packages/course-runtime/src/academy-app.js';
 import { simulators } from '../../packages/course-runtime/src/simulators.js';
+import { mountProductCopy } from '../../packages/course-runtime/src/product-copy.js';
 import { course } from '../../courses/ai-app-engineering/course-config.js';
 
 const eventBus = new EventBus();
@@ -16,4 +17,6 @@ const app = new AcademyRuntimeApp({
   eventBus,
   simulators,
 });
+
 app.mount();
+mountProductCopy(document.querySelector('#app'));

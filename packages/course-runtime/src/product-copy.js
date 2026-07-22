@@ -10,6 +10,10 @@ const artifactLabels = {
   promptV2: '通过评估的 Prompt',
   evaluationDataset: '回归测试集',
   evaluationReport: 'Prompt 评估报告',
+  modelInvocation: '标准模型调用配置',
+  streamingContract: '流式响应协议',
+  toolRegistry: '工具注册表',
+  agentLoopTrace: 'Agent Loop 运行轨迹',
 };
 
 const exactText = new Map([
@@ -25,10 +29,17 @@ const exactText = new Map([
   ['结构化输出验证流水线', '检查模型返回能否进入业务系统'],
   ['Few-shot 语义地图', '从候选示例中选出最有价值的三个'],
   ['Prompt 评估矩阵', '用固定案例检验 Prompt 是否可靠'],
+  ['模型调用适配台', '完成一次标准模型调用'],
+  ['流式响应控制台', '设计可取消的流式响应'],
+  ['工具调用工作台', '完成一次安全的工具调用'],
+  ['Agent Loop 单步实验', '看懂模型与工具的循环'],
   ['运行诊断', '检查代码'],
   ['应用当前修复', '修复当前问题'],
   ['保存技术决策', '确认这次选择'],
   ['发送请求', '使用这个请求继续'],
+  ['发送给模型', '运行调用'],
+  ['开始接收', '开始流式响应'],
+  ['运行一次工具调用', '运行工具调用'],
   ['运行评估', '运行全部测试'],
   ['只看失败/回归', '只看需要处理的案例'],
   ['所有诊断通过', '所有检查都已通过'],
@@ -44,6 +55,8 @@ const phraseReplacements = [
   ['下一课会在这个请求包之上构造 Prompt', '下一课会继续使用这个请求内容来完善 Prompt'],
   ['课程产物', '项目成果'],
   ['Runtime 学习进度', '学习进度'],
+  ['前两个专栏已经全部完成。', '下一专栏已经加入你的学习路径。'],
+  ['AIMessageChunk 持续合并', '持续合并收到的消息块'],
 ];
 
 function replacePhrases(value) {
@@ -67,12 +80,12 @@ function polishElement(element) {
     }
   }
 
-  if (element.matches('.sim-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete')) {
+  if (element.matches('.sim-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete, .lc-result')) {
     const next = replacePhrases(element.textContent);
     if (next !== element.textContent) element.textContent = next;
   }
 
-  if (element.matches('button, b, small, span') && element.children.length === 0) {
+  if (element.matches('button, b, small, span, label') && element.children.length === 0) {
     const trimmed = element.textContent.trim();
     if (exactText.has(trimmed)) element.textContent = exactText.get(trimmed);
   }

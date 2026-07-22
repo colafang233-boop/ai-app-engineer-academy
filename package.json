@@ -1,0 +1,14 @@
+{
+  "name": "ai-app-engineer-academy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build-cloudflare.mjs",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.68.0"
+  }
+}

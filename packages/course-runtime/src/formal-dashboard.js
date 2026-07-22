@@ -70,6 +70,17 @@ function columnPathData(app) {
   return [...developed, ...futureColumns];
 }
 
+function renderVersionBanner(course) {
+  const versions = course.officialVersion?.packages;
+  if (!versions) return '';
+  return `
+    <div class="v1-version-banner">
+      <b>专栏适用版本</b>：langchain@${versions.langchain} · @langchain/core@${versions['@langchain/core']} · @langchain/langgraph@${versions['@langchain/langgraph']} · zod@${versions.zod} · Node ${versions.node}
+      <br><small>版本基线日期：${course.officialVersion.asOf}。每节课页尾提供对应官方文档链接。</small>
+    </div>
+  `;
+}
+
 export function installFormalDashboard(app) {
   app.renderDashboard = function renderFormalDashboard() {
     const completed = getCompletedLessonCount(this);
@@ -99,6 +110,7 @@ export function installFormalDashboard(app) {
       ? `
           <div class="formal-section-head"><span>02</span><h2>当前专栏：${currentColumnConfig.title}</h2><small>COLUMN ${String(currentColumn).padStart(2, '0')}</small></div>
           <p class="formal-section-lede">${currentColumnConfig.description}</p>
+          ${currentColumn === 3 ? renderVersionBanner(this.course) : ''}
           ${this.renderColumn(currentColumnConfig)}
         `
       : `

@@ -1,15 +1,9 @@
 const futureColumns = [
   {
-    id: 'column-04',
-    title: 'RAG 知识库工程',
-    description: '文档、切分、Embedding、检索、引用与验证。',
-    lessonCount: 7,
-  },
-  {
     id: 'column-05',
     title: 'LangGraph 与 Agentic RAG',
-    description: 'State、路由、记忆、Checkpoint 与人工介入。',
-    lessonCount: 6,
+    description: 'State、路由、记忆、Checkpoint、自纠错检索与人工介入。',
+    lessonCount: 8,
   },
   {
     id: 'column-06',
@@ -20,8 +14,8 @@ const futureColumns = [
   {
     id: 'column-07',
     title: '企业 AI 应用实战',
-    description: '把 RAG、LangGraph、MCP 与验证全部接起来。',
-    lessonCount: 2,
+    description: '把 RAG、LangGraph、MCP、评估与部署全部接起来。',
+    lessonCount: 3,
   },
 ];
 
@@ -40,6 +34,7 @@ function getNextLesson(app) {
 }
 
 function getCurrentColumnNumber(app) {
+  if (app.progress.isExamPassed('exam-column-04-rag')) return 5;
   if (app.progress.isExamPassed('exam-column-03-official')) return 4;
   if (app.progress.isExamPassed('exam-column-02')) return 3;
   if (app.progress.isExamPassed('exam-column-01')) return 2;
@@ -62,7 +57,7 @@ function renderPathCard(column, index, currentColumn, stateLabel) {
 function columnPathData(app) {
   const developed = app.course.columns.map((column) => ({
     id: column.id,
-    title: column.title.replace(/^专栏[一二三] · /, ''),
+    title: column.title.replace(/^专栏[一二三四] · /, ''),
     description: column.description,
     lessonCount: column.lessonIds.length,
     examId: column.examId,
@@ -70,13 +65,25 @@ function columnPathData(app) {
   return [...developed, ...futureColumns];
 }
 
-function renderVersionBanner(course) {
+function renderLangChainVersionBanner(course) {
   const versions = course.officialVersion?.packages;
   if (!versions) return '';
   return `
     <div class="v1-version-banner">
       <b>专栏适用版本</b>：langchain@${versions.langchain} · @langchain/core@${versions['@langchain/core']} · @langchain/langgraph@${versions['@langchain/langgraph']} · zod@${versions.zod} · Node ${versions.node}
       <br><small>版本基线日期：${course.officialVersion.asOf}。每节课页尾提供对应官方文档链接。</small>
+    </div>
+  `;
+}
+
+function renderRagResearchBanner(course) {
+  const baseline = course.ragResearchBaseline;
+  if (!baseline) return '';
+  return `
+    <div class="rag-research-banner">
+      <div><b>框架中立 RAG 研究基线</b><span>${baseline.asOf}</span></div>
+      <p>Problem First · Evaluation First · Scenario Driven。LangChain、LlamaIndex、向量数据库和模型只作为实现候选，不定义课程结论。</p>
+      <small>${baseline.note}</small>
     </div>
   `;
 }
@@ -110,13 +117,15 @@ export function installFormalDashboard(app) {
       ? `
           <div class="formal-section-head"><span>02</span><h2>当前专栏：${currentColumnConfig.title}</h2><small>COLUMN ${String(currentColumn).padStart(2, '0')}</small></div>
           <p class="formal-section-lede">${currentColumnConfig.description}</p>
-          ${currentColumn === 3 ? renderVersionBanner(this.course) : ''}
+          ${currentColumn === 3 ? renderLangChainVersionBanner(this.course) : ''}
+          ${currentColumn === 4 ? renderRagResearchBanner(this.course) : ''}
+          ${currentColumn === 4 ? '<span class="future-column-preview" hidden>RAG 知识库工程已完成开发</span>' : ''}
           ${this.renderColumn(currentColumnConfig)}
         `
       : `
           <div class="formal-section-head"><span>02</span><h2>下一专栏：${futureColumn.title}</h2><small>COLUMN ${String(currentColumn).padStart(2, '0')}</small></div>
           <p class="formal-section-lede">${futureColumn.description}</p>
-          <div class="future-column-preview"><b>即将开发</b><p>第三专栏考试已经通过。后续课程将严格依据对应官方文档继续开发，不会用占位课冒充已完成内容。</p></div>
+          <div class="future-column-preview"><b>即将开发</b><p>前一专栏考试已经通过。后续课程会继续采用完整调研、互动实验、项目成果和生产门禁，不用占位课冒充完成内容。</p></div>
         `;
 
     this.content.innerHTML = `
@@ -128,7 +137,7 @@ export function installFormalDashboard(app) {
               <h1>从会写 Java CRUD，<br>到能独立做出<span>企业 AI 应用</span></h1>
               <p class="formal-lead">
                 这不是一套“照着敲 API”的教程。你会先弄懂模型、Prompt 和结构化输出，
-                再按照官方文档系统学习 LangChain、RAG、LangGraph 和 MCP。每节课必须完成实验并通过考试，下一课才会解锁。
+                再系统学习 LangChain、框架中立 RAG、LangGraph 和 MCP。每节课必须完成实验并通过考试，下一课才会解锁。
               </p>
               <div class="formal-stats">
                 <article><span>课程专栏</span><b>7</b><small>从认知到综合项目</small></article>
@@ -141,7 +150,7 @@ export function installFormalDashboard(app) {
               <div class="formal-sheet-label">下一步 · 第 ${nextLesson.number} 课</div>
               <h2>${nextLesson.title}</h2>
               <p>${nextLesson.description}</p>
-              <div class="formal-continue-meta"><span>已解锁</span><span>官方文档对齐</span><span>互动实验</span></div>
+              <div class="formal-continue-meta"><span>已解锁</span><span>研究依据</span><span>互动实验</span></div>
               <div class="formal-progress"><i><em style="width:${overall}%"></em></i><span>${overall}%</span></div>
               <button class="formal-primary" data-next-lesson="${nextLesson.id}">${completed ? '继续学习' : '开始第 1 课'}</button>
             </aside>
@@ -150,7 +159,7 @@ export function installFormalDashboard(app) {
 
         <section class="formal-section" id="columns">
           <div class="formal-section-head"><span>01</span><h2>七个专栏，一条完整学习路径</h2><small>LEARNING PATH</small></div>
-          <p class="formal-section-lede">不会直接把你扔进 LangGraph。先补齐 AI 应用最容易缺失的认知，再逐层增加能力；课程数量随官方能力边界调整，不再为了“32 节”强行压缩。</p>
+          <p class="formal-section-lede">先补齐 AI 应用最容易缺失的认知，再逐层增加能力；课程数量随真实能力边界调整，不为好看的数字强行压缩。</p>
           <div class="formal-column-path">${pathCards}</div>
         </section>
 

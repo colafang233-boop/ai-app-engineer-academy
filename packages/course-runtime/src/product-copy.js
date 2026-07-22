@@ -44,6 +44,7 @@ const phraseReplacements = [
   ['下一课会在这个请求包之上构造 Prompt', '下一课会继续使用这个请求内容来完善 Prompt'],
   ['课程产物', '项目成果'],
   ['Runtime 学习进度', '学习进度'],
+  ['前两个专栏已经全部完成。', '下一专栏已经加入你的学习路径。'],
 ];
 
 function replacePhrases(value) {
@@ -52,29 +53,46 @@ function replacePhrases(value) {
   return result;
 }
 
+function replaceDirectTextNodes(element) {
+  for (const node of element.childNodes) {
+    if (node.nodeType !== Node.TEXT_NODE) continue;
+    const next = replacePhrases(node.textContent);
+    if (next !== node.textContent) node.textContent = next;
+  }
+}
+
 function polishElement(element) {
   if (!(element instanceof HTMLElement)) return;
 
   if (exactText.has(element.textContent.trim()) && element.children.length === 0) {
-    element.textContent = exactText.get(element.textContent.trim());
+    const next = exactText.get(element.textContent.trim());
+    if (next !== element.textContent) element.textContent = next;
   }
 
   if (element.matches('.sim-chip')) {
     const key = Object.keys(artifactLabels).find((name) => element.textContent.includes(name));
     if (key) {
       const ready = element.textContent.includes('已读取');
-      element.textContent = `${artifactLabels[key]} · ${ready ? '已带入' : '尚未完成'}`;
+      const next = `${artifactLabels[key]} · ${ready ? '已带入' : '尚未完成'}`;
+      if (next !== element.textContent) element.textContent = next;
     }
   }
 
-  if (element.matches('.sim-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete')) {
+  if (element.matches('.exam-result')) {
+    replaceDirectTextNodes(element);
+  }
+
+  if (element.matches('.sim-result, .v1-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete')) {
     const next = replacePhrases(element.textContent);
     if (next !== element.textContent) element.textContent = next;
   }
 
   if (element.matches('button, b, small, span') && element.children.length === 0) {
     const trimmed = element.textContent.trim();
-    if (exactText.has(trimmed)) element.textContent = exactText.get(trimmed);
+    if (exactText.has(trimmed)) {
+      const next = exactText.get(trimmed);
+      if (next !== element.textContent) element.textContent = next;
+    }
   }
 }
 

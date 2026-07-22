@@ -13,6 +13,7 @@ on:
       - 'tools/test_formal_dashboard.mjs'
       - 'tools/test_column03_official.mjs'
       - 'tools/test_column03_official_browser.mjs'
+      - 'tools/run_column03_official_browser.mjs'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
@@ -57,12 +58,12 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run official LangChain v1 browser journey
-        run: node tools/test_column03_official_browser.mjs
+        run: node tools/run_column03_official_browser.mjs
 
       - name: Upload official browser evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: langchain-v1-official-browser-evidence
-          path: artifacts/*.png
+          path: artifacts/*
           if-no-files-found: ignore

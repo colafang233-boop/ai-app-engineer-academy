@@ -11,10 +11,12 @@ on:
       - 'tools/test_runtime_full.mjs'
       - 'tools/test_product_surface.mjs'
       - 'tools/test_formal_dashboard.mjs'
+      - 'tools/test_column03.mjs'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
       - 'agent/course-runtime-foundation'
+      - 'agent/column-03-langchain-core'
 
 jobs:
   runtime-checks:
@@ -44,3 +46,6 @@ jobs:
 
       - name: Check formal seven-column dashboard
         run: node tools/test_formal_dashboard.mjs
+
+      - name: Validate LangChain core column
+        run: node tools/test_column03.mjs

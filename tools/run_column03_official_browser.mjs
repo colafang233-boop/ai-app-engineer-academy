@@ -1,9 +1,14 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 await mkdir('artifacts', { recursive: true });
 
 try {
-  await import('./test_column03_official_browser.mjs');
+  const sourceUrl = new URL('./test_column03_official_browser.mjs', import.meta.url);
+  const generatedUrl = new URL('./.generated_column03_official_browser.mjs', import.meta.url);
+  const source = await readFile(sourceUrl, 'utf8');
+  const generated = source.replaceAll('`${BASE}#', '`${BASE}&nav=${Date.now()}#');
+  await writeFile(generatedUrl, generated, 'utf8');
+  await import('./.generated_column03_official_browser.mjs');
 } catch (error) {
   const detail = [
     error?.stack ?? String(error),

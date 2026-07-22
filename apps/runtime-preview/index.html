@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Course Runtime Preview · Lesson 03</title>
+  <style>
+    html{background:#f4f5f0;background-image:linear-gradient(rgba(36,53,67,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(36,53,67,.055) 1px,transparent 1px);background-size:28px 28px}body{margin:0}.preview-nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid #d8dedf;background:rgba(244,245,240,.92);backdrop-filter:blur(12px);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}.preview-nav b{margin-right:auto}.preview-nav button{border:1px solid #d8dedf;border-radius:8px;padding:7px 10px;background:#fff;cursor:pointer}.preview-nav button:hover{border-color:#0b7a75}.debug-panel{max-width:1056px;margin:0 auto 70px;padding:0 22px;font-family:ui-monospace,monospace}.debug-panel details{border:1px solid #d8dedf;border-radius:10px;background:#fff;padding:12px}.debug-panel pre{overflow:auto;white-space:pre-wrap;color:#344250}.preview-note{max-width:1056px;margin:18px auto 0;padding:0 22px;color:#6b7782;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px}
+  </style>
+</head>
+<body>
+  <nav class="preview-nav">
+    <b>CourseRuntime · Lesson 03 Migration Preview</b>
+    <button id="seedArtifacts" type="button">写入前置产物</button>
+    <button id="resetLesson" type="button">重置本课</button>
+    <button id="resetAll" type="button">重置全部</button>
+  </nav>
+  <p class="preview-note">请通过本地 HTTP Server 打开，例如 <code>python3 -m http.server 8000</code>，再访问 <code>/apps/runtime-preview/</code>。浏览器直接打开 file:// 时无法加载 ES Modules。</p>
+  <main id="course-root"></main>
+  <aside class="debug-panel">
+    <details open>
+      <summary><b>ArtifactStore 实时状态</b></summary>
+      <pre id="artifactDebug">{}</pre>
+    </details>
+  </aside>
+
+  <script type="module">
+    import {
+      ArtifactStore,
+      CourseRuntime,
+      EventBus,
+      ProgressStore,
+      mountCodeRepairLab,
+    } from '../../packages/course-runtime/src/index.js';
+    import lesson from '../../courses/ai-app-engineering/lessons/lesson-03.js';
+
+    const eventBus = new EventBus();
+    const artifacts = new ArtifactStore({ eventBus });
+    const progress = new ProgressStore({ eventBus });
+    const debug = document.querySelector('#artifactDebug');
+
+    const renderArtifacts = () => {
+      debug.textContent = JSON.stringify(artifacts.get(), null, 2);
+    };
+
+    eventBus.on('artifact:change', renderArtifacts);
+    eventBus.on('artifact:reset', renderArtifacts);
+
+    const runtime = new CourseRuntime({
+      root: document.querySelector('#course-root'),
+      lesson,
+      artifacts,
+      progress,
+      eventBus,
+      simulators: {
+        'code-repair': mountCodeRepairLab,
+      },
+    });
+
+    runtime.mount();
+    renderArtifacts();
+
+    document.querySelector('#seedArtifacts').addEventListener('click', () => {
+      artifacts.merge({
+        businessRisk: {
+          task: 'email intent',
+          risk: 'probabilistic classification',
+          needs: ['rules', 'schema', 'fallback'],
+        },
+        languageDecision: {
+          winner: 'ts',
+          reasons: ['browser runtime', 'shared types', 'LangChain JS'],
+        },
+      }, { source: 'runtime-preview' });
+      window.location.reload();
+    });
+
+    document.querySelector('#resetLesson').addEventListener('click', () => {
+      progress.resetLesson(lesson.id);
+      window.location.reload();
+    });
+
+    document.querySelector('#resetAll').addEventListener('click', () => {
+      artifacts.reset();
+      progress.resetLesson(lesson.id);
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

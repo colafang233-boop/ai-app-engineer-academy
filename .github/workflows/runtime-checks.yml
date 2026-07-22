@@ -59,10 +59,10 @@ jobs:
       - name: Run LangChain column browser journey
         run: node tools/test_column03_browser.mjs
 
-      - name: Upload browser screenshots
+      - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: column03-browser-screenshots
-          path: artifacts/*.png
+          name: column03-browser-evidence
+          path: artifacts/*
           if-no-files-found: ignore

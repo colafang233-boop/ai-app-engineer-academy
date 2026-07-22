@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 
 const PORT = 4173;
@@ -43,8 +43,11 @@ async function completeTransfer(page) {
 }
 
 async function assertNoOverflow(page, label) {
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
-  assert.equal(overflow, false, `${label} should not overflow horizontally`);
+  const metrics = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  assert.equal(metrics.scrollWidth > metrics.clientWidth + 1, false, `${label} should not overflow horizontally: ${JSON.stringify(metrics)}`);
 }
 
 await waitForServer();
@@ -71,7 +74,6 @@ try {
   assert.equal((await page.locator('.formal-column-card.active .formal-column-index').textContent()).trim(), 'COLUMN 03');
   await page.screenshot({ path: 'artifacts/column03-dashboard.png', fullPage: true });
 
-  // Lesson 10: fail without Messages/System, then correct the invocation.
   await enterLesson(page, 'lesson-10');
   await page.locator('[data-run]').click();
   await page.locator('.lc-result.warn').waitFor();
@@ -81,7 +83,6 @@ try {
   await page.locator('.lc-result.good').waitFor();
   await completeTransfer(page);
 
-  // Lesson 11: compare invoke, stream without aggregation, then correct it.
   await enterLesson(page, 'lesson-11');
   await page.locator('[data-start]').click();
   await page.waitForTimeout(1100);
@@ -96,7 +97,6 @@ try {
   await page.locator('.lc-result.good').waitFor();
   await completeTransfer(page);
 
-  // Lesson 12: fail least privilege, then fail schema, then complete the loop.
   await enterLesson(page, 'lesson-12');
   await page.locator('[data-run]').click();
   await page.locator('.lc-result.warn').waitFor();
@@ -109,7 +109,6 @@ try {
   await page.screenshot({ path: 'artifacts/lesson12-tool-calling.png', fullPage: true });
   await completeTransfer(page);
 
-  // Lesson 13: trigger iteration guard, reset, and complete the agent loop.
   await enterLesson(page, 'lesson-13');
   await page.locator('[data-limit]').evaluate((element) => {
     element.value = '1';
@@ -136,7 +135,7 @@ try {
 
   const resultLabels = await page.locator('.artifact-item summary b').allTextContents();
   for (const label of ['标准模型调用配置', '流式响应协议', '工具注册表', 'Agent Loop 运行轨迹']) {
-    assert.ok(resultLabels.includes(label), `Project results should include ${label}`);
+    assert.ok(resultLabels.includes(label), `Project results should include ${label}; actual=${JSON.stringify(resultLabels)}`);
   }
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -148,6 +147,19 @@ try {
 
   assert.deepEqual(errors, []);
   console.log('Column 03 browser flow passed.');
+} catch (error) {
+  let bodyText = '';
+  try {
+    bodyText = (await page.locator('body').innerText()).slice(-5000);
+  } catch {}
+  await writeFile('artifacts/failure.txt', [
+    error?.stack ?? String(error),
+    `URL: ${page.url()}`,
+    `Console errors: ${JSON.stringify(errors, null, 2)}`,
+    'Visible body tail:',
+    bodyText,
+  ].join('\n\n'));
+  throw error;
 } finally {
   await browser.close();
   server.kill('SIGTERM');

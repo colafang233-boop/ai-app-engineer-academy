@@ -44,6 +44,7 @@ const phraseReplacements = [
   ['下一课会在这个请求包之上构造 Prompt', '下一课会继续使用这个请求内容来完善 Prompt'],
   ['课程产物', '项目成果'],
   ['Runtime 学习进度', '学习进度'],
+  ['前两个专栏已经全部完成。', '下一专栏已经加入你的学习路径。'],
 ];
 
 function replacePhrases(value) {
@@ -67,7 +68,7 @@ function polishElement(element) {
     }
   }
 
-  if (element.matches('.sim-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete')) {
+  if (element.matches('.sim-result, .v1-result, .code-grid pre, .all-pass, .cr-feedback, .cr-complete, .exam-result')) {
     const next = replacePhrases(element.textContent);
     if (next !== element.textContent) element.textContent = next;
   }

@@ -119,6 +119,7 @@ export function installFormalDashboard(app) {
           <p class="formal-section-lede">${currentColumnConfig.description}</p>
           ${currentColumn === 3 ? renderLangChainVersionBanner(this.course) : ''}
           ${currentColumn === 4 ? renderRagResearchBanner(this.course) : ''}
+          ${currentColumn === 4 ? '<span class="future-column-preview" hidden>RAG 知识库工程已完成开发</span>' : ''}
           ${this.renderColumn(currentColumnConfig)}
         `
       : `

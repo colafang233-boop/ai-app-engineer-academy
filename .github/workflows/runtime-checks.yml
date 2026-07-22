@@ -7,21 +7,14 @@ on:
       - 'courses/ai-app-engineering/**'
       - 'apps/runtime-preview/**'
       - 'apps/runtime-academy/**'
-      - 'tools/test_course_runtime.mjs'
-      - 'tools/test_runtime_full.mjs'
-      - 'tools/test_product_surface.mjs'
-      - 'tools/test_formal_dashboard.mjs'
-      - 'tools/test_column03_official.mjs'
-      - 'tools/test_column03_official_browser.mjs'
-      - 'tools/run_column03_official_browser.mjs'
-      - 'tools/build-cloudflare.mjs'
+      - 'tools/**'
       - 'package.json'
       - 'wrangler.jsonc'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
-      - 'agent/course-runtime-foundation'
-      - 'agent/column-03-langchain-v1-official'
+      - 'main'
+      - 'agent/column-04-rag-official'
 
 jobs:
   runtime-checks:
@@ -37,17 +30,8 @@ jobs:
 
       - name: Check module syntax
         run: |
-          find packages/course-runtime/src courses/ai-app-engineering apps/runtime-academy \
-            -name '*.js' -print0 | xargs -0 -n1 node --check
-          node --check tools/build-cloudflare.mjs
-
-      - name: Build Cloudflare static artifact
-        run: |
-          npm run build
-          test -f dist/index.html
-          test -f dist/apps/runtime-academy/index.html
-          test -f dist/packages/course-runtime/src/academy-app.js
-          test -f dist/courses/ai-app-engineering/column-03-official.js
+          find packages/course-runtime/src courses/ai-app-engineering apps/runtime-academy tools \
+            -name '*.js' -o -name '*.mjs' | xargs -n1 node --check
 
       - name: Run runtime foundation tests
         run: node tools/test_course_runtime.mjs
@@ -64,6 +48,19 @@ jobs:
       - name: Validate official LangChain v1 curriculum
         run: node tools/test_column03_official.mjs
 
+      - name: Validate framework-neutral RAG curriculum
+        run: node tools/test_column04_rag.mjs
+
+      - name: Build Cloudflare static assets
+        run: npm run build
+
+      - name: Verify Cloudflare output
+        run: |
+          test -f dist/index.html
+          test -f dist/apps/runtime-academy/index.html
+          test -f dist/packages/course-runtime/src/simulators-rag.js
+          test -f dist/courses/ai-app-engineering/column-04-rag.js
+
       - name: Install browser test runtime
         run: |
           npm install --no-save playwright@1.54.1
@@ -72,10 +69,13 @@ jobs:
       - name: Run official LangChain v1 browser journey
         run: node tools/run_column03_official_browser.mjs
 
-      - name: Upload official browser evidence
+      - name: Run framework-neutral RAG browser journey
+        run: node tools/run_column04_rag_browser.mjs
+
+      - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: langchain-v1-official-browser-evidence
+          name: academy-browser-evidence
           path: artifacts/*
           if-no-files-found: ignore

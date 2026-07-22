@@ -1,11 +1,5 @@
 const futureColumns = [
   {
-    id: 'column-03',
-    title: 'LangChain 核心开发',
-    description: 'Model、Streaming、Tool Calling 和 Agent Loop。',
-    lessonCount: 4,
-  },
-  {
     id: 'column-04',
     title: 'RAG 知识库工程',
     description: '文档、切分、Embedding、检索、引用与验证。',
@@ -45,6 +39,7 @@ function getNextLesson(app) {
 }
 
 function getCurrentColumnNumber(app) {
+  if (app.progress.isExamPassed('exam-column-03')) return 4;
   if (app.progress.isExamPassed('exam-column-02')) return 3;
   if (app.progress.isExamPassed('exam-column-01')) return 2;
   return 1;
@@ -63,6 +58,26 @@ function renderPathCard(column, index, currentColumn, stateLabel) {
   `;
 }
 
+function normalizeBuiltColumn(column) {
+  return {
+    id: column.id,
+    title: column.title.replace(/^专栏[一二三] · /, ''),
+    description: column.description,
+    lessonCount: column.lessonIds.length,
+    examId: column.examId,
+  };
+}
+
+function renderFutureColumnPreview(column) {
+  return `
+    <div class="future-column-preview">
+      <span>下一阶段</span>
+      <h3>${column.title}</h3>
+      <p>${column.description}</p>
+      <div><b>${column.lessonCount} 节互动课程</b><small>课程内容正在按同一套学习标准开发</small></div>
+    </div>`;
+}
+
 export function installFormalDashboard(app) {
   app.renderDashboard = function renderFormalDashboard() {
     const completed = getCompletedLessonCount(this);
@@ -72,40 +87,39 @@ export function installFormalDashboard(app) {
     const totalLessons = 32;
     const overall = Math.round(completed / totalLessons * 100);
 
-    const columns = [
-      {
-        id: 'column-01',
-        title: '从 CRUD 到 AI 应用',
-        description: '弄懂模型、消息、Token 和 TypeScript 必需知识。',
-        lessonCount: 4,
-      },
-      {
-        id: 'column-02',
-        title: 'Prompt 与输出契约',
-        description: '业务规则、结构化输出、Zod、Few-shot 和评估。',
-        lessonCount: 5,
-      },
-      ...futureColumns,
-    ];
+    const builtColumns = this.course.columns.map(normalizeBuiltColumn);
+    const columns = [...builtColumns, ...futureColumns];
+    const passedExamIds = new Set(
+      this.course.exams
+        .filter((exam) => this.progress.isExamPassed(exam.id))
+        .map((exam) => exam.id),
+    );
 
     const pathCards = columns.map((column, index) => {
       const number = index + 1;
-      const active = number === currentColumn;
-      const passed = number === 1
-        ? this.progress.isExamPassed('exam-column-01')
-        : number === 2
-          ? this.progress.isExamPassed('exam-column-02')
-          : false;
+      const passed = column.examId ? passedExamIds.has(column.examId) : false;
       const label = passed
         ? `已完成 · ${column.lessonCount} 节`
-        : active
+        : number === currentColumn
           ? `进行中 · ${column.lessonCount} 节`
           : `未解锁 · ${column.lessonCount} 节`;
       return renderPathCard(column, index, currentColumn, label);
     }).join('');
 
-    const currentColumnConfig = this.course.columns.find((column) => column.id === `column-0${Math.min(currentColumn, 2)}`)
-      ?? this.course.columns[0];
+    const currentColumnConfig = this.course.columns[currentColumn - 1] ?? null;
+    const futureCurrent = columns[currentColumn - 1];
+    const currentTitle = currentColumnConfig?.title ?? futureCurrent.title;
+    const currentDescription = currentColumnConfig?.description ?? futureCurrent.description;
+    const currentBody = currentColumnConfig
+      ? this.renderColumn(currentColumnConfig)
+      : renderFutureColumnPreview(futureCurrent);
+
+    const allBuiltLessonsDone = this.course.lessons.every((lesson) => this.progress.isLessonComplete(lesson.id));
+    const continueLabel = allBuiltLessonsDone && currentColumn > this.course.columns.length
+      ? '回顾已完成课程'
+      : completed
+        ? '继续学习'
+        : '开始第 1 课';
 
     this.content.innerHTML = `
       <main class="formal-dashboard" id="dashboardTop">
@@ -126,12 +140,12 @@ export function installFormalDashboard(app) {
               </div>
             </div>
             <aside class="formal-continue-sheet">
-              <div class="formal-sheet-label">下一步 · 第 ${nextLesson.number} 课</div>
-              <h2>${nextLesson.title}</h2>
-              <p>${nextLesson.description}</p>
-              <div class="formal-continue-meta"><span>已解锁</span><span>约 20 分钟</span><span>互动实验</span></div>
+              <div class="formal-sheet-label">${allBuiltLessonsDone ? '已完成当前开发课程' : `下一步 · 第 ${nextLesson.number} 课`}</div>
+              <h2>${allBuiltLessonsDone ? 'LangChain 核心能力已经打通' : nextLesson.title}</h2>
+              <p>${allBuiltLessonsDone ? '你已经完成模型调用、流式响应、工具调用和 Agent Loop。下一专栏将进入 RAG 知识库工程。' : nextLesson.description}</p>
+              <div class="formal-continue-meta"><span>${allBuiltLessonsDone ? '可回顾' : '已解锁'}</span><span>约 20 分钟</span><span>互动实验</span></div>
               <div class="formal-progress"><i><em style="width:${overall}%"></em></i><span>${overall}%</span></div>
-              <button class="formal-primary" data-next-lesson="${nextLesson.id}">${completed ? '继续学习' : '开始第 1 课'}</button>
+              <button class="formal-primary" data-next-lesson="${nextLesson.id}">${continueLabel}</button>
             </aside>
           </div>
         </section>
@@ -143,9 +157,9 @@ export function installFormalDashboard(app) {
         </section>
 
         <section class="formal-section" id="currentColumn">
-          <div class="formal-section-head"><span>02</span><h2>当前专栏：${currentColumnConfig.title}</h2><small>COLUMN ${String(currentColumn).padStart(2, '0')}</small></div>
-          <p class="formal-section-lede">${currentColumnConfig.description}</p>
-          ${this.renderColumn(currentColumnConfig)}
+          <div class="formal-section-head"><span>02</span><h2>当前专栏：${currentTitle}</h2><small>COLUMN ${String(currentColumn).padStart(2, '0')}</small></div>
+          <p class="formal-section-lede">${currentDescription}</p>
+          ${currentBody}
         </section>
       </main>
     `;

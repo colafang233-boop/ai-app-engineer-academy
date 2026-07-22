@@ -12,6 +12,7 @@ on:
       - 'tools/test_product_surface.mjs'
       - 'tools/test_formal_dashboard.mjs'
       - 'tools/test_column03.mjs'
+      - 'tools/test_column03_browser.mjs'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
@@ -49,3 +50,19 @@ jobs:
 
       - name: Validate LangChain core column
         run: node tools/test_column03.mjs
+
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save playwright@1.54.1
+          npx playwright install --with-deps chromium
+
+      - name: Run LangChain column browser journey
+        run: node tools/test_column03_browser.mjs
+
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: column03-browser-screenshots
+          path: artifacts/*.png
+          if-no-files-found: ignore

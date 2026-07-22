@@ -1,0 +1,33 @@
+name: Runtime checks
+
+on:
+  pull_request:
+    paths:
+      - 'packages/course-runtime/**'
+      - 'courses/ai-app-engineering/**'
+      - 'apps/runtime-preview/**'
+      - 'tools/test_course_runtime.mjs'
+      - '.github/workflows/runtime-checks.yml'
+  push:
+    branches:
+      - 'agent/course-runtime-foundation'
+
+jobs:
+  runtime-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check module syntax
+        run: |
+          find packages/course-runtime/src courses/ai-app-engineering/lessons \
+            -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Run runtime foundation tests
+        run: node tools/test_course_runtime.mjs

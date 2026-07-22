@@ -6,7 +6,9 @@ on:
       - 'packages/course-runtime/**'
       - 'courses/ai-app-engineering/**'
       - 'apps/runtime-preview/**'
+      - 'apps/runtime-academy/**'
       - 'tools/test_course_runtime.mjs'
+      - 'tools/test_runtime_full.mjs'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
@@ -26,8 +28,11 @@ jobs:
 
       - name: Check module syntax
         run: |
-          find packages/course-runtime/src courses/ai-app-engineering/lessons \
+          find packages/course-runtime/src courses/ai-app-engineering apps/runtime-academy \
             -name '*.js' -print0 | xargs -0 -n1 node --check
 
       - name: Run runtime foundation tests
         run: node tools/test_course_runtime.mjs
+
+      - name: Run complete course configuration tests
+        run: node tools/test_runtime_full.mjs

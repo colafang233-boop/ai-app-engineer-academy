@@ -22,7 +22,7 @@ export async function runRagBrowserPart2(ctx) {
 
   await enterLesson('lesson-30');
   for (const id of ['stable-id', 'metadata', 'prefilter', 'normalize', 'alias']) await page.locator(`[data-requirement="${id}"]`).check();
-  await selectValue('[data-metric]', 'cosine');
+  await selectValue('select[data-metric]', 'cosine');
   await page.locator('[data-check]').click();
   await completeTransfer('lesson-30');
 

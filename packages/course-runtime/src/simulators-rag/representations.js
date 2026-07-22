@@ -214,12 +214,13 @@ export function mountRepresentationPolicyLab({ root, config, artifacts, onComple
   function render() {
     query(root, '[data-query]').textContent = active.query;
     query(root, '[data-hint]').textContent = `${active.language} · ${active.queryType}`;
-    const selected = decisions.get(active.id) ?? 'dense';
-    root.querySelectorAll('input[name="representation"]').forEach((input) => { input.checked = input.value === selected; });
-    query(root, '[data-candidates]').innerHTML = renderCandidateTable(ranking(selected), { scoreLabel: '模拟得分' });
+    const decision = decisions.get(active.id);
+    const previewMode = decision ?? 'dense';
+    root.querySelectorAll('input[name="representation"]').forEach((input) => { input.checked = input.value === decision; });
+    query(root, '[data-candidates]').innerHTML = renderCandidateTable(ranking(previewMode), { scoreLabel: '模拟得分' });
     mountScoreContributionInspector({
       root: query(root, '[data-score-inspector]'),
-      active: selected === 'hybrid' ? 'lexical' : selected,
+      active: previewMode === 'hybrid' ? 'lexical' : previewMode,
       modes: [
         { id: 'lexical', label: 'BM25', title: '词项贡献', explanation: '错误码和符号依赖精确词项。', contributions: [{ label: 'NVML', value: active.id === 'support' ? 0.96 : 0.18 }, { label: 'tenant_id', value: active.id === 'code' ? 0.92 : 0.05 }] },
         { id: 'dense', label: 'Dense', title: '整体语义相似度', explanation: '单向量压缩整段语义，但可能弱化局部符号。', contributions: [{ label: 'semantic intent', value: active.id === 'policy' ? 0.91 : 0.72 }, { label: 'exact identifier', value: 0.33 }] },

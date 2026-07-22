@@ -2,6 +2,7 @@ import { ArtifactStore } from '../../packages/course-runtime/src/artifact-store.
 import { EventBus } from '../../packages/course-runtime/src/event-bus.js';
 import { ProgressStore } from '../../packages/course-runtime/src/progress-store.js';
 import { AcademyRuntimeApp } from '../../packages/course-runtime/src/academy-app.js';
+import { installFormalDashboard } from '../../packages/course-runtime/src/formal-dashboard.js';
 import { simulators } from '../../packages/course-runtime/src/simulators.js';
 import { mountProductCopy } from '../../packages/course-runtime/src/product-copy.js';
 import { course as sourceCourse } from '../../courses/ai-app-engineering/course-config.js';
@@ -20,5 +21,6 @@ const app = new AcademyRuntimeApp({
   simulators,
 });
 
+installFormalDashboard(app);
 app.mount();
 mountProductCopy(document.querySelector('#app'));

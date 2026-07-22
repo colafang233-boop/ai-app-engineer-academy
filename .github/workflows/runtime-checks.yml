@@ -11,10 +11,13 @@ on:
       - 'tools/test_runtime_full.mjs'
       - 'tools/test_product_surface.mjs'
       - 'tools/test_formal_dashboard.mjs'
+      - 'tools/test_column03_official.mjs'
+      - 'tools/test_column03_official_browser.mjs'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
       - 'agent/course-runtime-foundation'
+      - 'agent/column-03-langchain-v1-official'
 
 jobs:
   runtime-checks:
@@ -36,7 +39,7 @@ jobs:
       - name: Run runtime foundation tests
         run: node tools/test_course_runtime.mjs
 
-      - name: Run complete course configuration tests
+      - name: Run complete base course configuration tests
         run: node tools/test_runtime_full.mjs
 
       - name: Check learner-facing product surface
@@ -44,3 +47,22 @@ jobs:
 
       - name: Check formal seven-column dashboard
         run: node tools/test_formal_dashboard.mjs
+
+      - name: Validate official LangChain v1 curriculum
+        run: node tools/test_column03_official.mjs
+
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save playwright@1.54.1
+          npx playwright install --with-deps chromium
+
+      - name: Run official LangChain v1 browser journey
+        run: node tools/test_column03_official_browser.mjs
+
+      - name: Upload official browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: langchain-v1-official-browser-evidence
+          path: artifacts/*.png
+          if-no-files-found: ignore

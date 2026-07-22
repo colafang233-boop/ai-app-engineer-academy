@@ -33,6 +33,14 @@ export async function runRagBrowserPart2(ctx) {
   await completeTransfer('lesson-31');
 
   await enterLesson('lesson-32');
+  const moveUp = async (label, times) => {
+    for (let index = 0; index < times; index += 1) {
+      await page.locator('[data-rules] .rule-card').filter({ hasText: label }).locator('[data-up]').click();
+    }
+  };
+  await moveUp('实时订单余额', 3);
+  await moveUp('代码符号与调用流', 3);
+  await moveUp('概念解释', 1);
   await page.locator('[data-run]').click();
   await completeTransfer('lesson-32');
 

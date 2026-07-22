@@ -9,6 +9,7 @@ on:
       - 'apps/runtime-academy/**'
       - 'tools/test_course_runtime.mjs'
       - 'tools/test_runtime_full.mjs'
+      - 'tools/test_product_surface.mjs'
       - '.github/workflows/runtime-checks.yml'
   push:
     branches:
@@ -36,3 +37,6 @@ jobs:
 
       - name: Run complete course configuration tests
         run: node tools/test_runtime_full.mjs
+
+      - name: Check learner-facing product surface
+        run: node tools/test_product_surface.mjs

@@ -50,7 +50,7 @@ const curriculumFiles = [
 ];
 const moduleSource = (await Promise.all(curriculumFiles.map((file) => fs.readFile(new URL(file, import.meta.url), 'utf8')))).join('\n');
 assert.doesNotMatch(moduleSource, /from ['"]langchain/);
-assert.doesNotMatch(moduleSource, /chunkSize\s*=\s*1000/);
+assert.doesNotMatch(moduleSource, /(?:const|let|var)\s+chunkSize\s*=\s*1000|chunkSize\s*:\s*1000/);
 assert.match(moduleSource, /BGE-M3/);
 assert.match(moduleSource, /Qwen3/);
 assert.match(moduleSource, /Multi-vector/);

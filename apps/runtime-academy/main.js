@@ -3,6 +3,7 @@ import { EventBus } from '../../packages/course-runtime/src/event-bus.js';
 import { ProgressStore } from '../../packages/course-runtime/src/progress-store.js';
 import { AcademyRuntimeApp } from '../../packages/course-runtime/src/academy-app.js';
 import { installFormalDashboard } from '../../packages/course-runtime/src/formal-dashboard.js';
+import { installOfficialColumnProduct } from '../../packages/course-runtime/src/official-column-product.js';
 import { simulators } from '../../packages/course-runtime/src/simulators.js';
 import { langChainV1Simulators } from '../../packages/course-runtime/src/simulators-langchain-v1.js';
 import { mountProductCopy } from '../../packages/course-runtime/src/product-copy.js';
@@ -24,5 +25,6 @@ const app = new AcademyRuntimeApp({
 });
 
 installFormalDashboard(app);
+installOfficialColumnProduct(app);
 app.mount();
 mountProductCopy(document.querySelector('#app'));

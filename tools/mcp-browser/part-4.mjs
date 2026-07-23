@@ -27,12 +27,13 @@ export async function runMcpBrowserPart4(ctx) {
 
   await navigate('dashboard');
   await page.waitForSelector('.quality-review-banner');
-  assert.equal(await page.locator('[data-review-column]').count(), 6);
-  assert.equal(await page.locator('.review-column-stack .lesson-card').count(), 83);
-  assert.equal(await page.locator('.review-column-stack [data-exam]').count(), 6);
-  assert.equal(await page.locator('.review-roadmap article').count(), 1);
-  assert.match(await page.locator('.review-roadmap').textContent(), /企业 AI 应用实战/);
-  await page.screenshot({ path: 'artifacts/all-six-columns-quality-review.png', fullPage: true });
+  assert.equal(await page.locator('[data-review-column]').count(), 7);
+  assert.equal(await page.locator('.review-column-stack .lesson-card').count(), 108);
+  assert.equal(await page.locator('.review-column-stack [data-exam]').count(), 7);
+  assert.equal(await page.locator('.review-roadmap').count(), 0);
+  assert.equal(await page.locator('.review-graduation').count(), 1);
+  assert.match(await page.locator('.review-graduation').textContent(), /108 LESSONS|完整学习路径/);
+  await page.screenshot({ path: 'artifacts/all-seven-columns-quality-review.png', fullPage: true });
 
   await page.locator('[data-action="artifacts"]').click();
   await page.locator('.artifact-drawer:not([hidden])').waitFor();

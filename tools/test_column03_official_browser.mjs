@@ -103,7 +103,6 @@ try {
   assert.match(await page.locator('.v1-version-banner').textContent(), /@langchain\/core@1\.2\.3/);
   await page.screenshot({ path: 'artifacts/langchain-v1-dashboard.png', fullPage: true });
 
-  // Lesson 10: package boundaries.
   await enterLesson(page, 'lesson-10');
   for (const [index, value] of ['langchain', 'core', 'integration', 'langgraph', 'classic', 'langsmith'].entries()) {
     await page.locator(`[data-select="${index}"]`).selectOption(value);
@@ -112,7 +111,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-10');
 
-  // Lesson 11: normalize OpenAI and Anthropic content blocks.
   await enterLesson(page, 'lesson-11');
   for (const [index, value] of ['reasoning', 'text', 'tool', 'metadata'].entries()) {
     await page.locator(`[data-map="${index}"]`).selectOption(value);
@@ -126,7 +124,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-11');
 
-  // Lesson 12: model profiles and batch scheduling.
   await enterLesson(page, 'lesson-12');
   await page.locator('[data-model="structured"]').click();
   await page.locator('input[name="method"][value="batch"]').check();
@@ -142,7 +139,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-12');
 
-  // Lesson 13: structured output strategies.
   await enterLesson(page, 'lesson-13');
   for (const value of ['provider', 'tool', 'split', 'model']) {
     await page.locator(`input[name="strategy"][value="${value}"]`).check();
@@ -151,7 +147,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-13');
 
-  // Lesson 14: route streaming events and protect frontend state.
   await enterLesson(page, 'lesson-14');
   for (const [index, value] of ['messages', 'updates', 'custom', 'events', 'events', 'events'].entries()) {
     await page.locator(`[data-route="${index}"]`).selectOption(value);
@@ -161,7 +156,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-14');
 
-  // Lesson 15: least privilege, schema, runtime context and ToolMessage recovery.
   await enterLesson(page, 'lesson-15');
   await page.locator('[data-tool="create_refund"]').uncheck();
   await page.locator('[data-schema]').selectOption('order_id');
@@ -171,14 +165,12 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-15');
 
-  // Lesson 16: run createAgent state loop with correct stop conditions.
   await enterLesson(page, 'lesson-16');
   await setRange(page.locator('[data-limit]'), 5);
   await page.locator('[data-auto]').click();
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-16');
 
-  // Lesson 17: reorder middleware hooks and enable context engineering controls.
   await enterLesson(page, 'lesson-17');
   const moveUp = async (label, times) => {
     for (let i = 0; i < times; i += 1) {
@@ -194,7 +186,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-17');
 
-  // Lesson 18: persist and restore isolated threads.
   await enterLesson(page, 'lesson-18');
   await page.locator('[data-checkpointer]').check();
   await page.locator('[data-isolate]').check();
@@ -207,7 +198,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-18');
 
-  // Lesson 19: classify failures and configure bounded retry/fallback.
   await enterLesson(page, 'lesson-19');
   for (const [index, value] of ['model-retry', 'fallback', 'tool-retry', 'fix', 'limit'].entries()) {
     await page.locator(`[data-policy="${index}"]`).selectOption(value);
@@ -217,7 +207,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-19');
 
-  // Lesson 20: PII and HITL decisions.
   await enterLesson(page, 'lesson-20');
   for (const value of ['redact', 'reject', 'edit', 'approve']) {
     await page.locator(`input[name="decision"][value="${value}"]`).check();
@@ -226,7 +215,6 @@ try {
   await page.locator('.v1-result.good').waitFor();
   await completeTransfer(page, 'lesson-20');
 
-  // Lesson 21: inspect failing runs and finish production release checklist.
   await enterLesson(page, 'lesson-21');
   await page.locator('[data-run="run-mw"]').click();
   await page.locator('[data-cause]').selectOption('tool-context');
@@ -242,7 +230,8 @@ try {
   await page.goto(`${BASE}#dashboard`);
   await page.waitForSelector('.formal-column-card.active');
   assert.equal((await page.locator('.formal-column-card.active .formal-column-index').textContent()).trim(), 'COLUMN 04');
-  assert.match(await page.locator('.future-column-preview').textContent(), /RAG 知识库工程|后续课程/);
+  assert.match(await page.locator('.rag-research-banner').textContent(), /框架中立 RAG|Problem First/);
+  assert.equal(await page.locator('[data-review-column="column-04"]').count(), 1);
   await page.screenshot({ path: 'artifacts/rag-column-unlocked-official.png', fullPage: true });
 
   await page.locator('[data-action="artifacts"]').click();

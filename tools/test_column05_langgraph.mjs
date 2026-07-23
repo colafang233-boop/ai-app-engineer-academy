@@ -49,7 +49,7 @@ assert.match(reviewMode, /reviewMode/);
 assert.match(reviewMode, /质量审阅 · 全部开放/);
 assert.match(reviewMode, /previewMode = true/);
 assert.match(dashboard, /renderReviewSections/);
-assert.match(dashboard, /全部已开发课程与考试已开放/);
+assert.match(dashboard, /108 节课程与 7 场考试已开放/);
 assert.match(product, /本课专业名词/);
 assert.match(product, /开始本课前，你需要知道/);
 assert.match(product, /targetCount = 60/);

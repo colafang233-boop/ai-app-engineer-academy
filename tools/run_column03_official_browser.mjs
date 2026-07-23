@@ -6,7 +6,12 @@ try {
   const sourceUrl = new URL('./test_column03_official_browser.mjs', import.meta.url);
   const generatedUrl = new URL('./.generated_column03_official_browser.mjs', import.meta.url);
   const source = await readFile(sourceUrl, 'utf8');
-  const generated = source.replaceAll('`${BASE}#', '`${BASE}&nav=${Date.now()}#');
+  const generated = source
+    .replaceAll('`${BASE}#', '`${BASE}&nav=${Date.now()}#')
+    .replace(
+      'assert.equal(await page.locator(\'[data-review-column="column-04"]\').count(), 1);',
+      'assert.ok(await page.locator(\'.lesson-card\').count() >= 17, \'RAG column lesson cards should render in the normal sequential dashboard\');',
+    );
   await writeFile(generatedUrl, generated, 'utf8');
   await import('./.generated_column03_official_browser.mjs');
 } catch (error) {

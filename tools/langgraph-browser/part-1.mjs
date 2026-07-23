@@ -7,7 +7,7 @@ export async function runLangGraphPart1(ctx) {
   await completeTransfer('lesson-39');
 
   await enterLesson('lesson-40');
-  for (let i = 0; i < 6; i += 1) await page.locator('[data-step]').click();
+  for (let i = 0; i < 6; i += 1) await page.locator('button[data-step]').click();
   await page.screenshot({ path: 'artifacts/langgraph-state-superstep.png', fullPage: true });
   await completeTransfer('lesson-40');
 

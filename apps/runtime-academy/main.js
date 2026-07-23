@@ -2,6 +2,7 @@ import { ArtifactStore } from '../../packages/course-runtime/src/artifact-store.
 import { EventBus } from '../../packages/course-runtime/src/event-bus.js';
 import { ProgressStore } from '../../packages/course-runtime/src/progress-store.js';
 import { AcademyRuntimeApp } from '../../packages/course-runtime/src/academy-app.js';
+import { installExamIntegrity } from '../../packages/course-runtime/src/exam-integrity.js';
 import { installFormalDashboard } from '../../packages/course-runtime/src/formal-dashboard.js';
 import { installOfficialColumnProduct } from '../../packages/course-runtime/src/official-column-product.js';
 import { installRagColumnProduct } from '../../packages/course-runtime/src/rag-column-product.js';
@@ -37,6 +38,7 @@ const app = new AcademyRuntimeApp({
   simulators: { ...simulators, ...langChainV1Simulators, ...ragSimulators, ...langGraphSimulators, ...mcpSimulators, ...enterpriseSimulators },
 });
 
+installExamIntegrity(app);
 installFormalDashboard(app);
 installOfficialColumnProduct(app);
 installRagColumnProduct(app);

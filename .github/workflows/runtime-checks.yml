@@ -14,7 +14,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'agent/column-06-mcp-official'
+      - 'agent/column-07-enterprise-service-desk'
 
 jobs:
   runtime-checks:
@@ -57,6 +57,11 @@ jobs:
       - name: Validate MCP protocol and host-integration curriculum
         run: node tools/test_column06_mcp.mjs
 
+      - name: Validate Enterprise AI Service Desk curriculum
+        run: |
+          node tools/test_column07_enterprise_foundations.mjs
+          node tools/test_column07_enterprise.mjs
+
       - name: Build Cloudflare static assets
         run: npm run build
 
@@ -64,12 +69,13 @@ jobs:
         run: |
           test -f dist/index.html
           test -f dist/apps/runtime-academy/index.html
-          test -f dist/apps/runtime-academy/mcp.css
+          test -f dist/apps/runtime-academy/enterprise.css
           test -f dist/apps/runtime-academy/responsive-headings.css
           test -f dist/apps/runtime-academy/responsive-layout.css
-          test -f dist/packages/course-runtime/src/simulators-mcp.js
-          test -f dist/packages/course-runtime/src/mcp-column-product.js
-          test -f dist/courses/ai-app-engineering/column-06-mcp.js
+          test -f dist/packages/course-runtime/src/simulators-enterprise.js
+          test -f dist/packages/course-runtime/src/enterprise-column-product.js
+          test -f dist/courses/ai-app-engineering/column-07-enterprise-service-desk.js
+          test -f dist/courses/ai-app-engineering/column-07-enterprise-fixtures.js
 
       - name: Install browser test runtime
         run: |
@@ -87,6 +93,9 @@ jobs:
 
       - name: Run MCP protocol and host-integration browser journey
         run: node tools/run_column06_mcp_browser.mjs
+
+      - name: Run Enterprise AI Service Desk browser journey
+        run: node tools/run_column07_enterprise_browser.mjs
 
       - name: Upload browser evidence
         if: always()

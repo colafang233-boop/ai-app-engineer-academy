@@ -9,7 +9,6 @@ on:
       - 'apps/runtime-academy/**'
       - 'tools/**'
       - 'package.json'
-      - 'package-lock.json'
       - 'wrangler.jsonc'
       - '.github/workflows/runtime-checks.yml'
   push:
@@ -27,7 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Install pinned development dependencies
         run: npm install --no-audit --no-fund

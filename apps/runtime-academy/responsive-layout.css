@@ -1,0 +1,85 @@
+/* Shared page-width system. Loaded last so every course column gets the same desktop breathing room. */
+
+:root {
+  --academy-reading-width: 1180px;
+  --academy-dashboard-width: 1240px;
+  --academy-page-ratio: 88vw;
+  --academy-dashboard-ratio: 90vw;
+}
+
+/* Lesson pages need a stable reading frame instead of filling almost the whole PC viewport. */
+.cr-course {
+  width: min(var(--academy-page-ratio), var(--academy-reading-width));
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* Dashboard may be slightly wider because its cards benefit from another column. */
+.formal-dashboard,
+.dashboard-shell {
+  width: min(var(--academy-dashboard-ratio), var(--academy-dashboard-width));
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* Exams remain focused and readable while sharing the same outer rhythm. */
+.exam-shell {
+  width: min(var(--academy-page-ratio), 920px);
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* MCP terminology/prerequisite panels already live inside .cr-course; avoid a second nested gutter. */
+.mcp-knowledge-panel {
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
+}
+
+/* Keep sticky lesson navigation aligned with the lesson reading frame. */
+.lesson-topbar {
+  padding-inline: max(6vw, calc((100vw - var(--academy-reading-width)) / 2));
+}
+
+/* The global navigation can remain slightly wider, but should never hug the PC viewport edges. */
+.academy-nav {
+  padding-inline: max(4vw, calc((100vw - var(--academy-dashboard-width)) / 2));
+}
+
+/* Wide screens should gain calm space rather than indefinitely stretching the content. */
+@media (min-width: 1600px) {
+  .cr-hero {
+    padding-top: 94px;
+  }
+
+  .cr-stage {
+    padding-block: 80px;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --academy-page-ratio: calc(100vw - 40px);
+    --academy-dashboard-ratio: calc(100vw - 40px);
+  }
+
+  .lesson-topbar,
+  .academy-nav {
+    padding-inline: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --academy-page-ratio: calc(100vw - 32px);
+    --academy-dashboard-ratio: calc(100vw - 32px);
+  }
+
+  .lesson-topbar,
+  .academy-nav {
+    padding-inline: 16px;
+  }
+}

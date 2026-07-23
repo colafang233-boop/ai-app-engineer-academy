@@ -50,7 +50,7 @@ export const mcpResearchBaseline = {
   transports: ['stdio', 'Streamable HTTP'],
   integrationModes: ['native host configuration', 'embedded client', 'hosted MCP', 'app/plugin', 'gateway/tunnel', 'agent-as-server'],
   authModes: ['anonymous', 'API key', 'Bearer token', 'OAuth delegated', 'client credentials', 'workload identity', 'SSO/tunnel'],
-  note: 'TypeScript SDK v2 仍处于 beta/开发阶段；生产主线继续使用 v1.29.0。Host 支持矩阵按 2026-07-23 官方文档记录，接入前必须重新核对。',
+  note: '当前正式协议仍是 2025-11-25，TypeScript SDK 生产主线为 v1.29.0。2026-07-28 Release Candidate 已发布，包含无状态核心、Extensions/Tasks 调整及 Roots、Sampling、Logging 弃用计划；正式版发布后必须重审本专栏。Host 支持矩阵接入前也必须重新核对。',
 };
 
 export function extendWithMcpColumn(course) {

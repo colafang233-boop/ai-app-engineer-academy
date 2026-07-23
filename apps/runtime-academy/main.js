@@ -5,6 +5,7 @@ import { AcademyRuntimeApp } from '../../packages/course-runtime/src/academy-app
 import { installDashboardSkillCards } from '../../packages/course-runtime/src/dashboard-skill-cards.js';
 import { installExamIntegrity } from '../../packages/course-runtime/src/exam-integrity.js';
 import { installFormalDashboard } from '../../packages/course-runtime/src/formal-dashboard.js';
+import { installLearningPathNavigation } from '../../packages/course-runtime/src/learning-path-navigation.js';
 import { installLessonNavigation } from '../../packages/course-runtime/src/lesson-navigation.js';
 import { installOfficialColumnProduct } from '../../packages/course-runtime/src/official-column-product.js';
 import { installRagColumnProduct } from '../../packages/course-runtime/src/rag-column-product.js';
@@ -49,6 +50,7 @@ installLangGraphColumnProduct(app);
 installMcpColumnProduct(app);
 installEnterpriseColumnProduct(app);
 installLessonNavigation(app);
+installLearningPathNavigation(app);
 installQualityReviewMode(app);
 app.mount();
 mountProductCopy(document.querySelector('#app'));

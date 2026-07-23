@@ -1,0 +1,77 @@
+/* Shared display-title rules. Loaded last so every column inherits the same responsive behavior. */
+
+.cr-course {
+  container-type: inline-size;
+}
+
+.cr-hero h1 {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  font-size: clamp(2rem, 5.3cqi, 4rem);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+/* Keep the highlighted semantic phrase together on desktop/tablet.
+   The whole title may move to a new line, but it should not leave an orphan such as “入 MCP”. */
+.cr-marker,
+.cr-hero h1 > span {
+  white-space: nowrap;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.dashboard-hero h1,
+.formal-hero h1,
+.exam-shell h1,
+.locked-page h1,
+.cr-stage h2,
+.column-head h2,
+.formal-section-head h2,
+.lesson-card-copy > b {
+  text-wrap: balance;
+  line-break: strict;
+  overflow-wrap: normal;
+}
+
+.cr-hero > p,
+.cr-stage-lede,
+.formal-lead,
+.formal-section-lede,
+.exam-shell > p {
+  text-wrap: pretty;
+}
+
+@supports not (font-size: 1cqi) {
+  .cr-hero h1 {
+    font-size: clamp(2rem, 4.2vw, 4rem);
+  }
+}
+
+@media (max-width: 700px) {
+  .cr-hero h1 {
+    font-size: clamp(1.95rem, 9.1cqi, 2.7rem);
+    line-height: 1.14;
+    letter-spacing: -.02em;
+  }
+
+  .dashboard-hero h1,
+  .formal-hero h1,
+  .exam-shell h1 {
+    text-wrap: balance;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Very narrow screens may wrap inside a long highlighted phrase,
+     but balanced wrapping still prevents a single-character final line. */
+  .cr-marker,
+  .cr-hero h1 > span {
+    white-space: normal;
+  }
+}

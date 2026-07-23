@@ -15,13 +15,13 @@ function getCurrentColumnNumber(app) {
 }
 
 const columnOutcomes = {
-  'column-01': '学完后，你能判断一个需求是否真的该用 AI，并独立写出稳定的模型请求骨架。',
-  'column-02': '学完后，你能把模糊业务需求拆成 Prompt、结构化输出、Few-shot 与评估闭环。',
-  'column-03': '学完后，你能用 LangChain v1 组织 Models、Messages、Tools、Middleware、Memory 与发布能力。',
-  'column-04': '学完后，你能按场景设计 RAG：先画像、再评测，再优化检索、证据与生产门禁。',
-  'column-05': '学完后，你能用 LangGraph 搭建可恢复的状态流、人工介入流程与可控 Agentic RAG。',
-  'column-06': '学完后，你能设计并接入 MCP：理解 Host、Server、授权、部署、安全与跨 Host 集成。',
-  'column-07': '学完后，你能把 AI 能力落成企业级产品：从领域、权限、评估到发布、事故与回滚。',
+  'column-01': '从第一个真实需求出发，亲手做出一个能稳定调用模型、处理异常、交给业务使用的 AI 功能。',
+  'column-02': '把老板一句模糊需求，变成模型听得懂、系统接得住、效果还能反复验证的完整方案。',
+  'column-03': '快速搭出一个会聊天、会调用工具、记得上下文、出错还能兜底的 AI 助手，不必从零手搓全部底层能力。',
+  'column-04': '让 AI 真正读懂公司的文档、制度和知识库：回答有依据，找不到时不瞎编，内容更新后也能及时生效。',
+  'column-05': '做出能分步骤完成复杂任务的 AI 工作流：中断后能继续，关键操作会请人确认，多种任务还能自动分工。',
+  'column-06': '把代码库、数据库、工单和内部系统接进 AI 助手，让它不只会聊天，还能安全地查资料、办事情、走审批。',
+  'column-07': '把前面学到的能力拼成一个真正能上线的企业 AI 产品，并知道如何控权限、看效果、扛故障和安全发布。',
 };
 
 function columnOutcome(column) { return columnOutcomes[column.id] ?? column.description; }

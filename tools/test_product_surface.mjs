@@ -5,6 +5,8 @@ import { productizeCourse } from '../courses/ai-app-engineering/product-course.j
 import { extendWithOfficialColumn03 } from '../courses/ai-app-engineering/column-03-official.js';
 
 const academyApp = await readFile(new URL('../packages/course-runtime/src/academy-app.js', import.meta.url), 'utf8');
+const learningPathNavigation = await readFile(new URL('../packages/course-runtime/src/learning-path-navigation.js', import.meta.url), 'utf8');
+const main = await readFile(new URL('../apps/runtime-academy/main.js', import.meta.url), 'utf8');
 const productCopy = await readFile(new URL('../packages/course-runtime/src/product-copy.js', import.meta.url), 'utf8');
 const productAdapter = await readFile(new URL('../packages/course-runtime/src/official-column-product.js', import.meta.url), 'utf8');
 const runtime = await readFile(new URL('../packages/course-runtime/src/course-runtime.js', import.meta.url), 'utf8');
@@ -28,6 +30,12 @@ assert.match(academyApp, /学习路径/);
 assert.match(academyApp, /\?debug=1/);
 assert.doesNotMatch(academyApp, />产物账本</);
 assert.doesNotMatch(academyApp, />体验模式</);
+
+assert.match(main, /installLearningPathNavigation/);
+assert.match(learningPathNavigation, /academy-nav-actions/);
+assert.match(learningPathNavigation, /#columns/);
+assert.match(learningPathNavigation, /scrollIntoView/);
+assert.match(learningPathNavigation, /pendingLearningPathScroll/);
 
 assert.match(productCopy, /已带入上一步成果/);
 assert.match(productCopy, /检查代码/);

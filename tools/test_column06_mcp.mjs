@@ -63,6 +63,7 @@ const html = fs.readFileSync('apps/runtime-academy/index.html', 'utf8');
 const dashboard = fs.readFileSync('packages/course-runtime/src/formal-dashboard.js', 'utf8');
 const product = fs.readFileSync('packages/course-runtime/src/mcp-column-product.js', 'utf8');
 const responsiveHeadings = fs.readFileSync('apps/runtime-academy/responsive-headings.css', 'utf8');
+const responsiveLayout = fs.readFileSync('apps/runtime-academy/responsive-layout.css', 'utf8');
 const simulatorSource = [
   'packages/course-runtime/src/simulators-mcp-foundations.js',
   'packages/course-runtime/src/simulators-mcp-access.js',
@@ -76,10 +77,15 @@ assert.match(main, /installMcpColumnProduct/);
 assert.match(main, /mcpSimulators/);
 assert.match(html, /mcp\.css/);
 assert.match(html, /responsive-headings\.css/);
+assert.match(html, /responsive-layout\.css/);
 assert.match(responsiveHeadings, /container-type:\s*inline-size/);
 assert.match(responsiveHeadings, /font-size:\s*clamp\([^;]*cqi/);
 assert.match(responsiveHeadings, /text-wrap:\s*balance/);
 assert.match(responsiveHeadings, /\.cr-marker[\s\S]*white-space:\s*nowrap/);
+assert.match(responsiveLayout, /--academy-page-ratio:\s*88vw/);
+assert.match(responsiveLayout, /width:\s*min\(var\(--academy-page-ratio\),\s*var\(--academy-reading-width\)\)/);
+assert.match(responsiveLayout, /\.lesson-topbar[\s\S]*padding-inline:\s*max\(6vw/);
+assert.match(responsiveLayout, /\.mcp-knowledge-panel[\s\S]*width:\s*100%/);
 assert.match(dashboard, /exam-column-06-mcp/);
 assert.match(dashboard, /MCP 协议与 Host 接入基线/);
 assert.doesNotMatch(dashboard, /id: 'column-06'.*lessonCount: 5/s);
@@ -93,4 +99,4 @@ assert.match(simulatorSource, /Token Passthrough/);
 assert.match(simulatorSource, /Durable Object/);
 assert.match(simulatorSource, /SSE 仅兼容/);
 
-console.log('Complete MCP protocol, access, authorization, deployment and responsive-title checks passed.');
+console.log('Complete MCP protocol, access, authorization, deployment, responsive-title and page-layout checks passed.');

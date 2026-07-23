@@ -14,7 +14,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'agent/column-05-langgraph-official'
+      - 'agent/column-06-mcp-official'
 
 jobs:
   runtime-checks:
@@ -54,6 +54,9 @@ jobs:
       - name: Validate LangGraph v1 and Agentic RAG curriculum
         run: node tools/test_column05_langgraph.mjs
 
+      - name: Validate MCP protocol and host-integration curriculum
+        run: node tools/test_column06_mcp.mjs
+
       - name: Build Cloudflare static assets
         run: npm run build
 
@@ -61,10 +64,10 @@ jobs:
         run: |
           test -f dist/index.html
           test -f dist/apps/runtime-academy/index.html
-          test -f dist/apps/runtime-academy/langgraph.css
-          test -f dist/packages/course-runtime/src/simulators-langgraph.js
-          test -f dist/packages/course-runtime/src/quality-review-mode.js
-          test -f dist/courses/ai-app-engineering/column-05-langgraph.js
+          test -f dist/apps/runtime-academy/mcp.css
+          test -f dist/packages/course-runtime/src/simulators-mcp.js
+          test -f dist/packages/course-runtime/src/mcp-column-product.js
+          test -f dist/courses/ai-app-engineering/column-06-mcp.js
 
       - name: Install browser test runtime
         run: |
@@ -79,6 +82,9 @@ jobs:
 
       - name: Run LangGraph v1 and Agentic RAG browser journey
         run: node tools/run_column05_langgraph_browser.mjs
+
+      - name: Run MCP protocol and host-integration browser journey
+        run: node tools/run_column06_mcp_browser.mjs
 
       - name: Upload browser evidence
         if: always()

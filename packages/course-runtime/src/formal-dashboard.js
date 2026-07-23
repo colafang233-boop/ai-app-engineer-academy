@@ -1,5 +1,4 @@
 const futureColumns = [
-  { id: 'column-06', title: 'MCP 工具与协议', description: 'TS MCP Server、工具发现、调用、认证与安全。', lessonCount: 5 },
   { id: 'column-07', title: '企业 AI 应用实战', description: '把 RAG、LangGraph、MCP、评估与部署全部接起来。', lessonCount: 3 },
 ];
 
@@ -11,6 +10,7 @@ function getNextLesson(app) {
     ?? app.course.lessons.at(-1);
 }
 function getCurrentColumnNumber(app) {
+  if (app.progress.isExamPassed('exam-column-06-mcp')) return 7;
   if (app.progress.isExamPassed('exam-column-05-langgraph')) return 6;
   if (app.progress.isExamPassed('exam-column-04-rag')) return 5;
   if (app.progress.isExamPassed('exam-column-03-official')) return 4;
@@ -26,7 +26,7 @@ function renderPathCard(column, index, currentColumn, stateLabel, reviewMode, de
 }
 
 function columnPathData(app) {
-  const developed = app.course.columns.map((column) => ({ id: column.id, title: column.title.replace(/^专栏[一二三四五] · /, ''), description: column.description, lessonCount: column.lessonIds.length, examId: column.examId, developed: true }));
+  const developed = app.course.columns.map((column) => ({ id: column.id, title: column.title.replace(/^专栏[一二三四五六] · /, ''), description: column.description, lessonCount: column.lessonIds.length, examId: column.examId, developed: true }));
   return [...developed, ...futureColumns.map((column) => ({ ...column, developed: false }))];
 }
 
@@ -46,17 +46,25 @@ function renderLangGraphVersionBanner(course) {
   if (!versions) return '';
   return `<div class="lg-version-banner"><div><b>LangGraph v1 官方教学基线</b><span>${baseline.asOf}</span></div><p>@langchain/langgraph@${versions['@langchain/langgraph']} · @langchain/core@${versions['@langchain/core']} · langchain@${versions.langchain} · zod@${versions.zod} · Node ${versions.node}</p><small>${baseline.note}</small></div>`;
 }
+function renderMcpVersionBanner(course) {
+  const baseline = course.mcpResearchBaseline;
+  const versions = baseline?.packages;
+  if (!versions) return '';
+  return `<div class="mcp-version-banner"><div><b>MCP 协议与 Host 接入基线</b><span>${baseline.asOf}</span></div><p>MCP ${baseline.protocol} · @modelcontextprotocol/sdk@${versions['@modelcontextprotocol/sdk']} · Zod ${versions.zod} · Node ${versions.node}</p><small>${baseline.note}</small></div>`;
+}
 function renderColumnBanner(course, number) {
   if (number === 3) return renderLangChainVersionBanner(course);
   if (number === 4) return renderRagResearchBanner(course);
   if (number === 5) return renderLangGraphVersionBanner(course);
+  if (number === 6) return renderMcpVersionBanner(course);
   return '';
 }
 
 function renderReviewSections(app) {
   const sections = app.course.columns.map((column, index) => `<section class="review-column-section" data-review-column="${column.id}"><div class="formal-section-head"><span>${String(index + 2).padStart(2, '0')}</span><h2>${column.title}</h2><small>OPEN REVIEW · COLUMN ${String(index + 1).padStart(2, '0')}</small></div><p class="formal-section-lede">${column.description}</p>${renderColumnBanner(app.course, index + 1)}${app.renderColumn(column, index)}</section>`).join('');
   const roadmap = futureColumns.map((column, index) => `<article><span>COLUMN ${String(app.course.columns.length + index + 1).padStart(2, '0')}</span><b>${column.title}</b><p>${column.description}</p><small>路线已开放查看，课程尚未开发，不用占位内容冒充完成。</small></article>`).join('');
-  return `<div class="quality-review-banner"><div><span>QUALITY REVIEW MODE</span><h2>全部已开发课程与考试已开放</h2></div><p>当前暂时关闭顺序解锁，只用于逐课检查内容、术语、颗粒度和交互质量。访问 <code>?review=0</code> 可恢复正式学习路径。</p></div><div class="review-column-stack">${sections}</div><section class="review-roadmap"><div class="formal-section-head"><span>07</span><h2>后续专栏路线</h2><small>ROADMAP ONLY</small></div><div>${roadmap}</div></section>`;
+  const roadmapSection = String(app.course.columns.length + 2).padStart(2, '0');
+  return `<div class="quality-review-banner"><div><span>QUALITY REVIEW MODE</span><h2>全部已开发课程与考试已开放</h2></div><p>当前暂时关闭顺序解锁，只用于逐课检查内容、术语、颗粒度和交互质量。访问 <code>?review=0</code> 可恢复正式学习路径。</p></div><div class="review-column-stack">${sections}</div><section class="review-roadmap"><div class="formal-section-head"><span>${roadmapSection}</span><h2>后续专栏路线</h2><small>ROADMAP ONLY</small></div><div>${roadmap}</div></section>`;
 }
 
 export function installFormalDashboard(app) {

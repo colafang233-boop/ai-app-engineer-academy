@@ -48,11 +48,11 @@ export async function runLangGraphPart3(ctx) {
   await page.waitForSelector('.formal-dashboard.review-mode');
   assert.equal(await page.locator('.formal-column-card').count(), 7);
   assert.equal(await page.locator('.formal-column-card.locked').count(), 0);
-  assert.equal(await page.locator('.review-column-section').count(), 5);
-  assert.equal(await page.locator('.lesson-card').count(), 58);
+  assert.equal(await page.locator('.review-column-section').count(), 6);
+  assert.equal(await page.locator('.lesson-card').count(), 83);
   assert.equal(await page.locator('.column-exam:disabled').count(), 0);
   assert.match(await page.locator('.preview-badge').textContent(), /质量审阅/);
-  assert.match(await page.locator('.review-roadmap').textContent(), /MCP 工具与协议/);
+  assert.match(await page.locator('.review-roadmap').textContent(), /企业 AI 应用实战/);
   await page.screenshot({ path: 'artifacts/all-columns-quality-review.png', fullPage: true });
 
   await page.locator('[data-action="artifacts"]').click();

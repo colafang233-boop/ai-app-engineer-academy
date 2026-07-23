@@ -27,12 +27,14 @@ export async function runMcpBrowserPart4(ctx) {
 
   await navigate('dashboard');
   await page.waitForSelector('.quality-review-banner');
-  assert.equal(await page.locator('[data-review-column]').count(), 7);
-  assert.equal(await page.locator('.review-column-stack .lesson-card').count(), 108);
-  assert.equal(await page.locator('.review-column-stack [data-exam]').count(), 7);
-  assert.equal(await page.locator('.review-roadmap').count(), 0);
-  assert.equal(await page.locator('.review-graduation').count(), 1);
-  assert.match(await page.locator('.review-graduation').textContent(), /108 LESSONS|完整学习路径/);
+  assert.equal(await page.locator('.formal-column-card').count(), 7);
+  assert.equal(await page.locator('[data-selected-column]').count(), 1);
+  await page.locator('[data-column-select="column-06"]').click();
+  await page.waitForSelector('[data-selected-column="column-06"]');
+  assert.equal(await page.locator('[data-selected-column="column-06"] .lesson-card').count(), 25);
+  assert.equal(await page.locator('[data-selected-column="column-06"] [data-exam]').count(), 1);
+  assert.equal(await page.locator('.review-column-stack').count(), 0);
+  assert.match(await page.locator('.quality-review-banner').textContent(), /108 节课程.*自由选择审阅/);
   await page.screenshot({ path: 'artifacts/all-seven-columns-quality-review.png', fullPage: true });
 
   await page.locator('[data-action="artifacts"]').click();

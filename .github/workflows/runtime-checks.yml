@@ -14,7 +14,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'agent/column-07-enterprise-service-desk'
 
 jobs:
   runtime-checks:
@@ -27,6 +26,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Install pinned development dependencies
+        run: npm install --no-audit --no-fund
 
       - name: Check module syntax
         run: |
@@ -44,6 +46,12 @@ jobs:
 
       - name: Check formal seven-column dashboard
         run: node tools/test_formal_dashboard.mjs
+
+      - name: Check release defaults and course identity
+        run: node tools/test_release_defaults.mjs
+
+      - name: Check exam option-order integrity
+        run: node tools/test_exam_integrity.mjs
 
       - name: Validate official LangChain v1 curriculum
         run: node tools/test_column03_official.mjs
@@ -72,15 +80,14 @@ jobs:
           test -f dist/apps/runtime-academy/enterprise.css
           test -f dist/apps/runtime-academy/responsive-headings.css
           test -f dist/apps/runtime-academy/responsive-layout.css
+          test -f dist/packages/course-runtime/src/exam-integrity.js
           test -f dist/packages/course-runtime/src/simulators-enterprise.js
           test -f dist/packages/course-runtime/src/enterprise-column-product.js
           test -f dist/courses/ai-app-engineering/column-07-enterprise-service-desk.js
           test -f dist/courses/ai-app-engineering/column-07-enterprise-fixtures.js
 
-      - name: Install browser test runtime
-        run: |
-          npm install --no-save playwright@1.54.1
-          npx playwright install --with-deps chromium
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Run official LangChain v1 browser journey
         run: node tools/run_column03_official_browser.mjs

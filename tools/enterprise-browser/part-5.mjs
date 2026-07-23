@@ -13,12 +13,17 @@ export async function runEnterprisePart5(ctx) {
 
   await navigate('dashboard');
   await page.waitForSelector('.formal-dashboard.review-mode');
-  assert.equal(await page.locator('[data-review-column]').count(), 7);
-  assert.equal(await page.locator('.review-column-stack .lesson-card').count(), 108);
-  assert.equal(await page.locator('.review-column-stack [data-exam]').count(), 7);
-  assert.equal(await page.locator('.review-roadmap').count(), 0);
-  assert.equal(await page.locator('.review-graduation').count(), 1);
-  assert.match(await page.locator('.quality-review-banner').textContent(), /108 节课程.*7 场考试/);
+  assert.equal(await page.locator('.formal-column-card').count(), 7);
+  assert.equal(await page.locator('[data-selected-column]').count(), 1);
+  assert.equal(await page.locator('[data-selected-column="column-07"] .lesson-card').count(), 25);
+  assert.equal(await page.locator('[data-selected-column="column-07"] [data-exam]').count(), 1);
+  await page.locator('[data-column-select="column-01"]').click();
+  await page.waitForSelector('[data-selected-column="column-01"]');
+  assert.equal(await page.locator('[data-selected-column="column-01"] .lesson-card').count(), 4);
+  await page.locator('[data-column-select="column-07"]').click();
+  await page.waitForSelector('[data-selected-column="column-07"]');
+  assert.equal(await page.locator('.review-column-stack').count(), 0);
+  assert.match(await page.locator('.quality-review-banner').textContent(), /108 节课程.*自由选择审阅/);
   await page.screenshot({ path: 'artifacts/complete-108-lessons-quality-review.png', fullPage: true });
 
   await page.locator('[data-action="artifacts"]').click();
@@ -48,6 +53,9 @@ export async function runEnterprisePart5(ctx) {
   await page.waitForSelector('.formal-dashboard');
   assert.equal(await page.locator('.quality-review-banner').count(), 0);
   assert.ok(await page.locator('.formal-column-card.locked').count() >= 1);
+  await page.locator('[data-column-select="column-07"]').click();
+  await page.waitForSelector('[data-selected-column="column-07"]');
+  assert.equal(await page.locator('[data-selected-column="column-07"] .lesson-card:disabled').count(), 25);
   await navigate('lesson/lesson-84', 'review=0');
   await page.waitForSelector('.locked-page');
   assert.match(await page.locator('.locked-page').textContent(), /还没有开放|完成上一课/);

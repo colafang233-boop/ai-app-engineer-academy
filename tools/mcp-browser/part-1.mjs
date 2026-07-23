@@ -1,7 +1,30 @@
 export async function runMcpBrowserPart1(ctx) {
-  const { page, enterLesson, completeTransfer, runDecision, runClassification } = ctx;
+  const { assert, page, enterLesson, completeTransfer, runDecision, runClassification } = ctx;
 
   await enterLesson(59);
+  const titleLayout = await page.locator('.cr-hero h1').evaluate((heading) => {
+    const lineCount = (element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const tops = [...range.getClientRects()]
+        .filter((rect) => rect.width > 1 && rect.height > 1)
+        .map((rect) => Math.round(rect.top));
+      return new Set(tops).size;
+    };
+    const marker = heading.querySelector('.cr-marker');
+    const parent = heading.parentElement;
+    return {
+      titleLines: lineCount(heading),
+      markerLines: marker ? lineCount(marker) : 0,
+      headingWidth: heading.getBoundingClientRect().width,
+      parentWidth: parent.getBoundingClientRect().width,
+      fontSize: getComputedStyle(heading).fontSize,
+    };
+  });
+  assert.equal(titleLayout.titleLines, 1, `Lesson 59 desktop title should fit one line: ${JSON.stringify(titleLayout)}`);
+  assert.equal(titleLayout.markerLines, 1, `Highlighted phrase must not split into an orphan line: ${JSON.stringify(titleLayout)}`);
+  assert.ok(titleLayout.headingWidth <= titleLayout.parentWidth + 1, `Title should use, but not exceed, its container: ${JSON.stringify(titleLayout)}`);
+  await page.screenshot({ path: 'artifacts/responsive-course-title-desktop.png', fullPage: true });
   await runDecision(['function', 'mcp', 'api', 'app', 'a2a', 'resource']);
   await completeTransfer(59);
 

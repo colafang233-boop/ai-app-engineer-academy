@@ -44,6 +44,9 @@ jobs:
       - name: Check learner-facing product surface
         run: node tools/test_product_surface.mjs
 
+      - name: Check persistent lesson navigation
+        run: node tools/test_lesson_navigation.mjs
+
       - name: Check formal seven-column dashboard
         run: node tools/test_formal_dashboard.mjs
 
@@ -78,9 +81,11 @@ jobs:
           test -f dist/index.html
           test -f dist/apps/runtime-academy/index.html
           test -f dist/apps/runtime-academy/enterprise.css
+          test -f dist/apps/runtime-academy/lesson-navigation.css
           test -f dist/apps/runtime-academy/responsive-headings.css
           test -f dist/apps/runtime-academy/responsive-layout.css
           test -f dist/packages/course-runtime/src/exam-integrity.js
+          test -f dist/packages/course-runtime/src/lesson-navigation.js
           test -f dist/packages/course-runtime/src/simulators-enterprise.js
           test -f dist/packages/course-runtime/src/enterprise-column-product.js
           test -f dist/courses/ai-app-engineering/column-07-enterprise-service-desk.js

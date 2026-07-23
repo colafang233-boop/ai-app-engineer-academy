@@ -66,6 +66,7 @@ jobs:
           test -f dist/apps/runtime-academy/index.html
           test -f dist/apps/runtime-academy/mcp.css
           test -f dist/apps/runtime-academy/responsive-headings.css
+          test -f dist/apps/runtime-academy/responsive-layout.css
           test -f dist/packages/course-runtime/src/simulators-mcp.js
           test -f dist/packages/course-runtime/src/mcp-column-product.js
           test -f dist/courses/ai-app-engineering/column-06-mcp.js

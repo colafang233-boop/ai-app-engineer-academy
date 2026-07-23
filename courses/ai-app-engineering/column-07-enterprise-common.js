@@ -14,6 +14,14 @@ export const enterpriseSources = {
   otelFlags: { label: 'OpenTelemetry Feature Flag Conventions', url: 'https://opentelemetry.io/docs/specs/semconv/feature-flags/' },
   openFeature: { label: 'OpenFeature Evaluation Context', url: 'https://openfeature.dev/specification/sections/evaluation-context/' },
   evals: { label: 'LangSmith Evaluation Concepts', url: 'https://docs.langchain.com/langsmith/evaluation-concepts' },
+  langGraph: { label: 'LangGraph Overview', url: 'https://docs.langchain.com/oss/javascript/langgraph/overview' },
+  langGraphInterrupts: { label: 'LangGraph Interrupts', url: 'https://docs.langchain.com/oss/javascript/langgraph/interrupts' },
+  langGraphPersistence: { label: 'LangGraph Persistence', url: 'https://docs.langchain.com/oss/javascript/langgraph/persistence' },
+  mcpSpec: { label: 'MCP Specification 2025-11-25', url: 'https://modelcontextprotocol.io/specification/2025-11-25' },
+  mcpTools: { label: 'MCP Tools', url: 'https://modelcontextprotocol.io/specification/2025-11-25/server/tools' },
+  mcpAuthorization: { label: 'MCP Authorization', url: 'https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization' },
+  mcpSecurity: { label: 'MCP Security Best Practices', url: 'https://modelcontextprotocol.io/specification/2025-11-25/basic/security_best_practices' },
+  agentGuide: { label: 'OpenAI · A Practical Guide to Building AI Agents', url: 'https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/' },
 };
 
 export const enterprisePrediction = (title, description, correctValue, options, correctText, incorrectText = '保留这个判断，下面用企业场景验证它。') => ({

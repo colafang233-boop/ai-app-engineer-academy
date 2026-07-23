@@ -13,18 +13,28 @@ export async function runMcpBrowserPart1(ctx) {
     };
     const marker = heading.querySelector('.cr-marker');
     const parent = heading.parentElement;
+    const course = heading.closest('.cr-course');
+    const courseRect = course.getBoundingClientRect();
     return {
       titleLines: lineCount(heading),
       markerLines: marker ? lineCount(marker) : 0,
       headingWidth: heading.getBoundingClientRect().width,
       parentWidth: parent.getBoundingClientRect().width,
+      courseWidth: courseRect.width,
+      leftGutter: courseRect.left,
+      rightGutter: window.innerWidth - courseRect.right,
+      viewportWidth: window.innerWidth,
       fontSize: getComputedStyle(heading).fontSize,
     };
   });
   assert.equal(titleLayout.titleLines, 1, `Lesson 59 desktop title should fit one line: ${JSON.stringify(titleLayout)}`);
   assert.equal(titleLayout.markerLines, 1, `Highlighted phrase must not split into an orphan line: ${JSON.stringify(titleLayout)}`);
   assert.ok(titleLayout.headingWidth <= titleLayout.parentWidth + 1, `Title should use, but not exceed, its container: ${JSON.stringify(titleLayout)}`);
-  await page.screenshot({ path: 'artifacts/responsive-course-title-desktop.png', fullPage: true });
+  assert.ok(titleLayout.courseWidth <= titleLayout.viewportWidth * .9, `Desktop lesson content should not fill the viewport: ${JSON.stringify(titleLayout)}`);
+  assert.ok(titleLayout.leftGutter >= titleLayout.viewportWidth * .05, `Desktop lesson needs a visible left breathing gutter: ${JSON.stringify(titleLayout)}`);
+  assert.ok(titleLayout.rightGutter >= titleLayout.viewportWidth * .05, `Desktop lesson needs a visible right breathing gutter: ${JSON.stringify(titleLayout)}`);
+  assert.ok(Math.abs(titleLayout.leftGutter - titleLayout.rightGutter) <= 2, `Desktop lesson should remain centered: ${JSON.stringify(titleLayout)}`);
+  await page.screenshot({ path: 'artifacts/responsive-course-layout-desktop.png', fullPage: true });
   await runDecision(['function', 'mcp', 'api', 'app', 'a2a', 'resource']);
   await completeTransfer(59);
 

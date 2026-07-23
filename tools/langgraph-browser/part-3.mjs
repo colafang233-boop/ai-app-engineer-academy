@@ -48,12 +48,15 @@ export async function runLangGraphPart3(ctx) {
   await page.waitForSelector('.formal-dashboard.review-mode');
   assert.equal(await page.locator('.formal-column-card').count(), 7);
   assert.equal(await page.locator('.formal-column-card.locked').count(), 0);
-  assert.equal(await page.locator('.review-column-section').count(), 7);
-  assert.equal(await page.locator('.lesson-card').count(), 108);
-  assert.equal(await page.locator('.column-exam:disabled').count(), 0);
+  assert.equal(await page.locator('[data-selected-column]').count(), 1);
+  assert.equal(await page.locator('[data-selected-column="column-06"] .lesson-card').count(), 25);
+  assert.equal(await page.locator('[data-selected-column="column-06"] [data-exam]').count(), 1);
   assert.match(await page.locator('.preview-badge').textContent(), /质量审阅/);
-  assert.equal(await page.locator('.review-roadmap').count(), 0);
-  assert.equal(await page.locator('.review-graduation').count(), 1);
+  await page.locator('[data-column-select="column-05"]').click();
+  await page.waitForSelector('[data-selected-column="column-05"]');
+  assert.equal(await page.locator('[data-selected-column="column-05"] .lesson-card').count(), 20);
+  assert.equal(await page.locator('[data-selected-column="column-05"] [data-exam]').count(), 1);
+  assert.equal(await page.locator('.review-column-stack').count(), 0);
   await page.screenshot({ path: 'artifacts/all-columns-quality-review.png', fullPage: true });
 
   await page.locator('[data-action="artifacts"]').click();

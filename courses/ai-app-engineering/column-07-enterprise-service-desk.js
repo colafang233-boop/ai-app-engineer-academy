@@ -67,7 +67,7 @@ export const enterpriseColumnBaseline = {
 export function extendWithEnterpriseColumn(course) {
   return {
     ...course,
-    qualityReviewModeDefault: true,
+    qualityReviewModeDefault: false,
     enterpriseResearchBaseline: enterpriseColumnBaseline,
     columns: [
       ...course.columns,

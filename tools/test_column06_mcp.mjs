@@ -85,6 +85,6 @@ assert.match(simulatorSource, /Client Credentials/);
 assert.match(simulatorSource, /Streamable HTTP/);
 assert.match(simulatorSource, /Token Passthrough/);
 assert.match(simulatorSource, /Durable Object/);
-assert.doesNotMatch(simulatorSource, /SSE[^\n]*新标准/);
+assert.match(simulatorSource, /SSE 仅兼容/);
 
 console.log('Complete MCP protocol, access, authorization and deployment curriculum checks passed.');

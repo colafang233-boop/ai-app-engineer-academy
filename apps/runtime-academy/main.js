@@ -13,6 +13,8 @@ import { installLangGraphColumnProduct } from '../../packages/course-runtime/src
 import { installMcpColumnProduct } from '../../packages/course-runtime/src/mcp-column-product.js';
 import { installEnterpriseColumnProduct } from '../../packages/course-runtime/src/enterprise-column-product.js';
 import { installQualityReviewMode } from '../../packages/course-runtime/src/quality-review-mode.js';
+import { installSupabaseAuthSync } from '../../packages/course-runtime/src/supabase-auth-sync.js';
+import { SUPABASE_CONFIG } from '../../packages/course-runtime/src/supabase-config.js';
 import { simulators } from '../../packages/course-runtime/src/simulators.js';
 import { langChainV1Simulators } from '../../packages/course-runtime/src/simulators-langchain-v1.js';
 import { ragSimulators } from '../../packages/course-runtime/src/simulators-rag.js';
@@ -52,5 +54,6 @@ installEnterpriseColumnProduct(app);
 installLessonNavigation(app);
 installLearningPathNavigation(app);
 installQualityReviewMode(app);
+installSupabaseAuthSync(app, SUPABASE_CONFIG);
 app.mount();
 mountProductCopy(document.querySelector('#app'));

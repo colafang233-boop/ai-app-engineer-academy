@@ -8,6 +8,7 @@ export const enterpriseSources = {
   owaspNavigator: { label: 'OWASP Agentic Threats Navigator', url: 'https://genai.owasp.org/resource/owasp-gen-ai-security-project-agentic-threats-navigator/' },
   slo: { label: 'Google SRE Workbook · Implementing SLOs', url: 'https://sre.google/workbook/implementing-slos/' },
   incident: { label: 'Google SRE Workbook · Incident Response', url: 'https://sre.google/workbook/incident-response/' },
+  canary: { label: 'Google SRE Workbook · Canarying Releases', url: 'https://sre.google/workbook/canarying-releases/' },
   outbox: { label: 'AWS Prescriptive Guidance · Transactional Outbox', url: 'https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html' },
   cloudPatterns: { label: 'AWS Cloud Design Patterns', url: 'https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/introduction.html' },
   otel: { label: 'OpenTelemetry Semantic Conventions', url: 'https://opentelemetry.io/docs/specs/semconv/' },

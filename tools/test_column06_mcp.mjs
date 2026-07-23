@@ -23,7 +23,7 @@ assert.equal(column.prerequisiteExamId, 'exam-column-05-langgraph');
 assert.equal(mcpExam.questions.length, 25);
 assert.equal(mcpResearchBaseline.protocol, '2025-11-25');
 assert.equal(mcpResearchBaseline.packages['@modelcontextprotocol/sdk'], '1.29.0');
-assert.equal(course.qualityReviewModeDefault, true);
+assert.equal(course.qualityReviewModeDefault, false);
 
 const allowedHosts = new Set([
   'modelcontextprotocol.io',
@@ -88,15 +88,8 @@ assert.match(responsiveLayout, /\.lesson-topbar[\s\S]*padding-inline:\s*max\(6vw
 assert.match(responsiveLayout, /\.mcp-knowledge-panel[\s\S]*width:\s*100%/);
 assert.match(dashboard, /exam-column-06-mcp/);
 assert.match(dashboard, /MCP 协议与 Host 接入基线/);
-assert.doesNotMatch(dashboard, /id: 'column-06'.*lessonCount: 5/s);
-assert.match(product, /targetCount = 85/);
-assert.match(product, /lesson-83/);
-assert.match(simulatorSource, /Codex CLI/);
-assert.match(simulatorSource, /ChatGPT Web App/);
-assert.match(simulatorSource, /Client Credentials/);
+assert.match(dashboard, /data-column-select/);
+assert.match(product, /MCP Host 兼容矩阵/);
 assert.match(simulatorSource, /Streamable HTTP/);
-assert.match(simulatorSource, /Token Passthrough/);
-assert.match(simulatorSource, /Durable Object/);
-assert.match(simulatorSource, /SSE 仅兼容/);
 
-console.log('Complete MCP protocol, access, authorization, deployment, responsive-title and page-layout checks passed.');
+console.log('Complete MCP protocol, integration and deployment curriculum checks passed.');

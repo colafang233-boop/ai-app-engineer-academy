@@ -5,6 +5,7 @@ function getNextLesson(app) {
     ?? app.course.lessons.at(-1);
 }
 function getCurrentColumnNumber(app) {
+  if (app.progress.isExamPassed('exam-column-07-enterprise')) return 7;
   if (app.progress.isExamPassed('exam-column-06-mcp')) return 7;
   if (app.progress.isExamPassed('exam-column-05-langgraph')) return 6;
   if (app.progress.isExamPassed('exam-column-04-rag')) return 5;

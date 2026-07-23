@@ -12,5 +12,6 @@
 .formal-column-card:hover .column-skill-item:nth-child(3){transition-delay:.06s}
 .selected-column-intro{display:none!important}
 .v1-version-banner,.rag-research-banner,.lg-version-banner,.mcp-version-banner,.enterprise-baseline-banner,.selected-column-lock-note{display:none!important}
+.formal-section-head h2:focus{outline:none!important}
 @media(max-width:700px){.formal-column-card{min-height:292px}}
 @media(prefers-reduced-motion:reduce){.column-skill-item,.column-skill-item i{transition:none}}

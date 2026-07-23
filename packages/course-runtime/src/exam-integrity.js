@@ -35,6 +35,25 @@ function reorderQuestionOptions(section, examId, questionIndex) {
   }
 }
 
+function installPassedExamMessage(app, exam, result) {
+  const submit = app.content.querySelector('[data-submit]');
+  if (!submit || !result) return;
+
+  submit.addEventListener('click', () => {
+    queueMicrotask(() => {
+      if (!result.classList.contains('good')) return;
+      const state = app.progress.getExam(exam.id);
+      const columnIndex = app.course.columns.findIndex((column) => column.id === exam.columnId);
+      const hasNextColumn = columnIndex >= 0 && columnIndex < app.course.columns.length - 1;
+      const nextStep = hasNextColumn
+        ? '下一专栏已经加入你的学习路径。'
+        : '全部课程与最终毕业答辩已经完成。';
+      result.innerHTML = `✓ ${state.score} 分，通过。${nextStep} <button data-dashboard type="button">返回学习路径</button>`;
+      result.querySelector('[data-dashboard]')?.addEventListener('click', () => app.go('dashboard'));
+    });
+  });
+}
+
 export function installExamIntegrity(app) {
   const baseRenderExam = app.renderExam.bind(app);
 
@@ -52,5 +71,6 @@ export function installExamIntegrity(app) {
       result.setAttribute('role', 'status');
       result.setAttribute('aria-live', 'polite');
     }
+    installPassedExamMessage(this, exam, result);
   };
 }

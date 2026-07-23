@@ -7,58 +7,42 @@ const css = fs.readFileSync('apps/runtime-academy/formal-dashboard.css', 'utf8')
 const skillCss = fs.readFileSync('apps/runtime-academy/dashboard-skill-cards.css', 'utf8');
 const main = fs.readFileSync('apps/runtime-academy/main.js', 'utf8');
 const html = fs.readFileSync('apps/runtime-academy/index.html', 'utf8');
-const officialColumn = fs.readFileSync('courses/ai-app-engineering/column-03-official.js', 'utf8');
-const ragColumn = fs.readFileSync('courses/ai-app-engineering/column-04-rag.js', 'utf8');
-const graphColumn = fs.readFileSync('courses/ai-app-engineering/column-05-langgraph.js', 'utf8');
-const mcpColumn = fs.readFileSync('courses/ai-app-engineering/column-06-mcp.js', 'utf8');
-const enterpriseColumn = fs.readFileSync('courses/ai-app-engineering/column-07-enterprise-service-desk.js', 'utf8');
 
-assert.match(dashboard, /选择一个专栏，查看它的完整课程/);
-assert.match(dashboard, /COLUMN \$\{String\(index \+ 1\)\.padStart\(2, '0'\)\}/);
+// One selected column is rendered at a time and remains switchable from the seven-card path.
 assert.match(dashboard, /data-column-select/);
 assert.match(dashboard, /data-selected-column/);
 assert.match(dashboard, /dashboardSelectedColumnId/);
-assert.match(dashboard, /首页一次只展开一个专栏/);
-assert.doesNotMatch(dashboard, /review-column-stack/);
-assert.match(dashboard, /LangGraph v1 官方教学基线/);
-assert.match(dashboard, /MCP 协议与 Host 接入基线/);
-assert.match(dashboard, /NovaTech Enterprise AI Service Desk/);
-assert.match(dashboard, /108 节课程/);
-assert.match(dashboard, /renderLangChainVersionBanner/);
-assert.match(dashboard, /renderRagResearchBanner/);
-assert.match(dashboard, /renderLangGraphVersionBanner/);
-assert.match(dashboard, /renderMcpVersionBanner/);
-assert.match(dashboard, /renderEnterpriseBanner/);
+assert.match(dashboard, /renderSelectedColumn/);
+assert.match(dashboard, /formal-column-path/);
 assert.match(dashboard, /QUALITY REVIEW MODE/);
-assert.doesNotMatch(dashboard, /futureColumns/);
+assert.doesNotMatch(dashboard, /review-column-stack|futureColumns/);
+
+// The overview cards retain compact learner-facing skills for all seven columns.
+assert.match(skillCards, /const compactColumnSkills/);
+assert.match(skillCards, /const columnSkills/);
 assert.match(skillCards, /技能 GET/);
-assert.match(skillCards, /把代码库、数据库和工单接给 AI/);
-assert.equal((skillCards.match(/'column-0[1-7]':/g) ?? []).length, 7);
 assert.match(skillCards, /installDashboardSkillCards/);
-assert.match(officialColumn, /LangChain JavaScript v1/);
-assert.match(ragColumn, /RAG 检索与知识库工程/);
-assert.match(graphColumn, /LangGraph 与 Agentic RAG/);
-assert.match(mcpColumn, /MCP 协议、工具服务与企业集成/);
-assert.match(enterpriseColumn, /企业级 AI 解决方案与生产交付/);
-assert.match(dashboard, /formal-stats/);
-assert.match(dashboard, /formal-continue-sheet/);
-assert.match(css, /grid-template-columns:repeat\(7,minmax\(150px,1fr\)\)/);
-assert.match(css, /formal-column-badges/);
+assert.equal((skillCards.match(/'column-0[1-7]':/g) ?? []).length, 14);
+
+// Current visual treatment: seven-column cards stay interactive, while redundant expanded metadata is hidden.
 assert.match(css, /formal-column-card:hover/);
 assert.match(css, /formal-column-card\.selected/);
 assert.match(css, /selected-column-panel/);
-assert.match(css, /--column-step:28px/);
-assert.match(css, /--column-step:5px/);
 assert.match(skillCss, /column-skill-block/);
 assert.match(skillCss, /column-skill-item/);
-assert.match(skillCss, /grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+assert.match(skillCss, /selected-column-intro\{display:none!important\}/);
+assert.match(skillCss, /enterprise-baseline-banner/);
+assert.match(skillCss, /selected-column-lock-note/);
+assert.match(skillCss, /formal-section-head h2:focus\{outline:none!important\}/);
+assert.doesNotMatch(skillCss, /column-skill-block\.expanded/);
+
+// Runtime and styles are installed in the learner application.
 assert.match(main, /installFormalDashboard\(app\)/);
 assert.match(main, /installDashboardSkillCards\(app\)/);
-assert.match(main, /extendWithEnterpriseColumn/);
 assert.match(main, /installEnterpriseColumnProduct/);
 assert.match(main, /installQualityReviewMode/);
 assert.match(html, /formal-dashboard\.css/);
 assert.match(html, /dashboard-skill-cards\.css/);
 assert.match(html, /enterprise\.css/);
 
-console.log('Formal dashboard skill-list navigation and interaction checks passed.');
+console.log('Formal dashboard current-state checks passed.');

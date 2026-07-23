@@ -1,8 +1,12 @@
 const DEFAULT_KEY = 'ai-academy-artifacts-v3';
 
+function normalizeState(value) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+}
+
 function readJson(storage, key) {
   try {
-    return JSON.parse(storage.getItem(key) ?? '{}');
+    return normalizeState(JSON.parse(storage.getItem(key) ?? '{}'));
   } catch {
     return {};
   }
@@ -43,6 +47,19 @@ export class ArtifactStore {
   merge(patch, metadata = {}) {
     for (const [name, value] of Object.entries(patch)) {
       this.set(name, value, metadata);
+    }
+    return this.get();
+  }
+
+  replace(snapshot, { emit = true, source = 'external' } = {}) {
+    this.state = normalizeState(structuredClone(snapshot ?? {}));
+    this.storage.setItem(this.key, JSON.stringify(this.state));
+    if (emit) {
+      this.eventBus?.emit('artifact:change', {
+        action: 'replace',
+        source,
+        artifacts: this.get(),
+      });
     }
     return this.get();
   }

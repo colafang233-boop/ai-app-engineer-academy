@@ -1,8 +1,15 @@
 const PROGRESS_DEFAULT_KEY = 'ai-academy-progress-v4';
 
+function normalizeState(value) {
+  return {
+    lessons: value?.lessons && typeof value.lessons === 'object' ? value.lessons : {},
+    exams: value?.exams && typeof value.exams === 'object' ? value.exams : {},
+  };
+}
+
 function readState(storage, key) {
   try {
-    return JSON.parse(storage.getItem(key) ?? '{"lessons":{},"exams":{}}');
+    return normalizeState(JSON.parse(storage.getItem(key) ?? '{"lessons":{},"exams":{}}'));
   } catch {
     return { lessons: {}, exams: {} };
   }
@@ -27,15 +34,21 @@ export class ProgressStore {
   completeStage(lessonId, stageId) {
     const lesson = this.getLesson(lessonId);
     const completedStages = [...new Set([...lesson.completedStages, stageId])];
-    this.#writeLesson(lessonId, { ...lesson, completedStages });
+    this.#writeLesson(lessonId, {
+      ...lesson,
+      completedStages,
+      updatedAt: new Date().toISOString(),
+    });
   }
 
   completeLesson(lessonId) {
     const lesson = this.getLesson(lessonId);
+    const now = new Date().toISOString();
     this.#writeLesson(lessonId, {
       ...lesson,
       completed: true,
-      completedAt: new Date().toISOString(),
+      completedAt: lesson.completedAt ?? now,
+      updatedAt: now,
     });
   }
 
@@ -73,6 +86,23 @@ export class ProgressStore {
 
   getSnapshot() {
     return JSON.parse(JSON.stringify(this.state));
+  }
+
+  getAll() {
+    return this.getSnapshot();
+  }
+
+  replace(snapshot, { emit = true, source = 'external' } = {}) {
+    this.state = normalizeState(JSON.parse(JSON.stringify(snapshot ?? {})));
+    this.storage.setItem(this.key, JSON.stringify(this.state));
+    if (emit) {
+      this.eventBus?.emit('progress:change', {
+        action: 'replace',
+        source,
+        snapshot: this.getSnapshot(),
+      });
+    }
+    return this.getSnapshot();
   }
 
   resetAll() {

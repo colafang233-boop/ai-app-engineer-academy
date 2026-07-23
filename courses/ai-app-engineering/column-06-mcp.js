@@ -56,7 +56,7 @@ export const mcpResearchBaseline = {
 export function extendWithMcpColumn(course) {
   return {
     ...course,
-    qualityReviewModeDefault: true,
+    qualityReviewModeDefault: false,
     mcpResearchBaseline,
     columns: [
       ...course.columns,

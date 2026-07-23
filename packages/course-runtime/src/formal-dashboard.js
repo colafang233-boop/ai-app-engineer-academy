@@ -95,6 +95,7 @@ export function installFormalDashboard(app) {
     const overall = Math.round(completed / totalLessons * 100);
     const graduated = this.progress.isExamPassed('exam-column-07-enterprise');
     const fallbackColumn = this.course.columns[currentColumn - 1] ?? this.course.columns.at(-1);
+    if (!this.dashboardSelectionExplicit) this.dashboardSelectedColumnId = null;
     const selectedColumn = this.course.columns.find((column) => column.id === this.dashboardSelectedColumnId) ?? fallbackColumn;
     const selectedIndex = this.course.columns.indexOf(selectedColumn);
     this.dashboardSelectedColumnId = selectedColumn.id;
@@ -114,6 +115,7 @@ export function installFormalDashboard(app) {
     this.content.querySelector('[data-next-lesson]')?.addEventListener('click', (event) => { this.go(`lesson/${event.currentTarget.dataset.nextLesson}`); });
     this.content.querySelectorAll('[data-column-select]').forEach((button) => {
       button.addEventListener('click', () => {
+        this.dashboardSelectionExplicit = true;
         this.dashboardSelectedColumnId = button.dataset.columnSelect;
         this.renderDashboard();
         requestAnimationFrame(() => {

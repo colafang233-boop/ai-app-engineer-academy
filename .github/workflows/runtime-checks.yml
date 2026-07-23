@@ -14,7 +14,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'agent/column-04-rag-official'
+      - 'agent/column-05-langgraph-official'
 
 jobs:
   runtime-checks:
@@ -51,6 +51,9 @@ jobs:
       - name: Validate framework-neutral RAG curriculum
         run: node tools/test_column04_rag.mjs
 
+      - name: Validate LangGraph v1 and Agentic RAG curriculum
+        run: node tools/test_column05_langgraph.mjs
+
       - name: Build Cloudflare static assets
         run: npm run build
 
@@ -58,8 +61,10 @@ jobs:
         run: |
           test -f dist/index.html
           test -f dist/apps/runtime-academy/index.html
-          test -f dist/packages/course-runtime/src/simulators-rag.js
-          test -f dist/courses/ai-app-engineering/column-04-rag.js
+          test -f dist/apps/runtime-academy/langgraph.css
+          test -f dist/packages/course-runtime/src/simulators-langgraph.js
+          test -f dist/packages/course-runtime/src/quality-review-mode.js
+          test -f dist/courses/ai-app-engineering/column-05-langgraph.js
 
       - name: Install browser test runtime
         run: |
@@ -71,6 +76,9 @@ jobs:
 
       - name: Run framework-neutral RAG browser journey
         run: node tools/run_column04_rag_browser.mjs
+
+      - name: Run LangGraph v1 and Agentic RAG browser journey
+        run: node tools/run_column05_langgraph_browser.mjs
 
       - name: Upload browser evidence
         if: always()
